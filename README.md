@@ -11,4 +11,6 @@ The client-side code for the application is available in the [BeautyLingerieClie
 ## Backend
 
 The server-side code for the API is available in the [BeautyLingerieWebApi repository](https://github.com/AndreaNikolchova/BeautyLingerieWebApi).
+Still in process :)
+
   
