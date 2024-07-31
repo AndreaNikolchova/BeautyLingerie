@@ -1,8 +1,16 @@
-# React + Vite
+# Beauty Lingerie
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Beauty Lingerie** is a web application for managing and displaying lingerie products. It consists of a React.js frontend and a .NET Core Web API backend.
 
-Currently, two official plugins are available:
+## Project Structure
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Frontend
+
+The client-side code for the application is available in the [BeautyLingerieClient repository](https://github.com/AndreaNikolchova/BeautyLingerie).
+
+## Backend
+
+The server-side code for the API is available in the [BeautyLingerieWebApi repository](https://github.com/AndreaNikolchova/BeautyLingerieWebApi).
+Still in process :)
+
+  
