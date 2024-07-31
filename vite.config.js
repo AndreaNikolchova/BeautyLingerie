@@ -9,7 +9,7 @@ export default defineConfig({
       '/api': {
         target: 'https://localhost:7090',
         changeOrigin: true,
-        secure: false, // Use this option if you are working with self-signed certificates
+        secure: false,
         rewrite: (path) => path.replace(/^\/api/, '')
       }
     }
