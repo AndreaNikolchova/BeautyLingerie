@@ -1,22 +1,11 @@
 
-import { useState, useEffect } from 'react'
-import { StarIcon } from '@heroicons/react/20/solid'
-import { Radio, RadioGroup } from '@headlessui/react'
-import { getOne } from '../../api/products-api'
-import { useParams } from 'react-router-dom'
+import { useState } from 'react'
+import {useGetOneProduct} from '../../hooks/useProducts'
 
+export default function ProductDetails() {
+  
+    const [product] = useState(useGetOneProduct());
 
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
-
-export default function Example() {
-    const { productId } = useParams();
-    const [product, setProduct] = useState({});
-    useEffect(() => {
-        getOne(productId)
-            .then(result => setProduct(result));
-    }, []);
 
     return (
         <div className="bg-white">
