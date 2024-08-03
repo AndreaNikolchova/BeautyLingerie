@@ -35,10 +35,10 @@ export default function Example() {
         <header className="bg-beige">
             <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
                 <div className="flex lg:flex-1">
-                    <a href="#" className="-m-1.5 p-1.5">
+                    <Link to='/' className="-m-1.5 p-1.5">
                         <span className="sr-only">Beauty Lingerie</span>
                         <img alt="" src="/Logo.png" className="h-20 w-auto" />
-                    </a>
+                    </Link>
                 </div>
                 <div className="flex lg:hidden">
                     <button

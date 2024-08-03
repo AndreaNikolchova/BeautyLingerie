@@ -1,24 +1,42 @@
-import {Routes, Route} from 'react-router-dom';
+import { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
+
 import Header from './componets/header/Header';
 import Products from './componets/product-list/ProductsList';
 import Home from './componets/home/Home';
 import ProductDetails from './componets/products-details/ProductsDetails';
 import Cart from './componets/cart/Cart';
 import Login from './componets/login/Login';
+import { AuthContext } from './context/AuthContext';
 
 function App() {
- 
+  const [authState, setAuthState] = useState({})
+  const changeAuthState = (state) => {
+    setAuthState(state);
+  }
+  const contextData = {
+    email: authState.email,
+    accessToken: authState.accessToken,
+    isAuthenticated: !!authState.email,
+    changeAuthState,
+
+
+  };
+
   return (
     <>
-      <Header/>
-    <Routes>
-      <Route path='/' element={ <Home/>}/>
-      <Route path='/products' element={ <Products/>}/>
-      <Route path='/products/:productId/details' element={<ProductDetails/>}/>
-      <Route path='/cart' element={ <Cart/>}/>
-      <Route path='/login' element={ <Login/>}/>
-    </Routes>
-      </>
+      <AuthContext.Provider value={contextData}>
+
+        <Header />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/products' element={<Products />} />
+          <Route path='/products/:productId/details' element={<ProductDetails />} />
+          <Route path='/cart' element={<Cart />} />
+          <Route path='/login' element={<Login />} />
+        </Routes>
+      </AuthContext.Provider>
+    </>
   )
 }
 
