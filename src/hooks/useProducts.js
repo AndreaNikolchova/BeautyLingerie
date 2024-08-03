@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useParams } from 'react-router-dom'
+
 import {getAll, getOne} from"../api/products-api";
 
 export function useGetAllProducts(){
@@ -11,12 +11,13 @@ export function useGetAllProducts(){
     return [products,setProducts]
 }
 
-export function useGetOneProduct(){
-    const { productId } = useParams();
+export function useGetOneProduct(productId){
     const [product, setProduct] = useState({});
+    console.log(productId);
     useEffect(() => {
         getOne(productId)
             .then(result => setProduct(result));
     }, []);
+    console.log(product)
     return [product,setProduct];
 }

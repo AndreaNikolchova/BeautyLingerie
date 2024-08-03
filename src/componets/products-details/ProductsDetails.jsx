@@ -1,10 +1,12 @@
 
-import { useState } from 'react'
+import { useParams } from 'react-router-dom';
 import {useGetOneProduct} from '../../hooks/useProducts'
 
 export default function ProductDetails() {
+    const { productId } = useParams();
+
+    const [product] = useGetOneProduct(productId);
   
-    const [product] = useState(useGetOneProduct());
 
 
     return (
