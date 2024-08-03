@@ -13,11 +13,9 @@ export function useGetAllProducts(){
 
 export function useGetOneProduct(productId){
     const [product, setProduct] = useState({});
-    console.log(productId);
     useEffect(() => {
         getOne(productId)
             .then(result => setProduct(result));
-    }, []);
-    console.log(product)
+    }, [productId]);
     return [product,setProduct];
 }

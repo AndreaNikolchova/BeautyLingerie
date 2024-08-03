@@ -11,9 +11,12 @@ export default {
         },
       colors: {
       'beige': '#FBF4F2',
+      'logoPurple':'#863aff',
+      'hoverPurple':'#9f66fb'
     },},
   },
   plugins: [
     require('@tailwindcss/aspect-ratio'),
+    require('@tailwindcss/forms')
   ],
 }

@@ -5,13 +5,13 @@ export default async function requester(method,url,data){
     }
     if(data){
         options.headers ={
-            'Content-Type': 'application-json',
+            'Content-Type': 'application/json',
         };
         options.body = JSON.stringify(data);
     }
     const responce = await fetch(url,options);
-    const result = responce.json();
     
+    const result = responce.json();
     return result;
 
 }
