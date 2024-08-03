@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: { 
+        gridTemplateRows: {
+          '[auto,auto,1fr]': 'auto auto 1fr',
+        },
       colors: {
       'beige': '#FBF4F2',
     },},

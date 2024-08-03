@@ -17,13 +17,14 @@ import {
 
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { Link } from 'react-router-dom'
 
-const products = [
-    { name: 'Analytics', description: 'Get a better understanding of your traffic', href: '#' },
-    { name: 'Engagement', description: 'Speak directly to your customers', href: '#' },
-    { name: 'Security', description: 'Your customers’ data will be safe and secure' },
-    { name: 'Integrations', description: 'Connect with third-party tools', href: '#' },
-    { name: 'Automations', description: 'Build strategic funnels that will convert', href: '#' },
+const productCategories = [
+    { name: 'Bikini', href: '/bikini' },
+    { name: 'Underwear', href: '/underwear' },
+    { name: 'Others', href: '/others' },
+    { name: 'All', href: '' },
+
 ]
 
 
@@ -61,17 +62,16 @@ export default function Example() {
                             className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-beige shadow-lg ring-1 ring-gray-900/5 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"
                         >
                             <div className="p-4">
-                                {products.map((item) => (
+                                {productCategories.map((item) => (
                                     <div
                                         key={item.name}
                                         className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-white-50"
                                     >
                                         <div className="flex-auto">
-                                            <a href={item.href} className="block font-semibold text-gray-900">
+                                            <Link to={`/products${item.href}`} className="block font-semibold text-gray-900">
                                                 {item.name}
                                                 <span className="absolute inset-0" />
-                                            </a>
-                                            <p className="mt-1 text-gray-600">{item.description}</p>
+                                            </Link>
                                         </div>
                                     </div>
                                 ))}
@@ -80,21 +80,24 @@ export default function Example() {
                         </PopoverPanel>
                     </Popover>
 
-                    <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+                    <Link to={'/products/new-arrivals'} className="text-sm font-semibold leading-6 text-gray-900">
                         New Arrivals
-                    </a>
-                    <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+                    </Link>
+                    <Link to={'/about'} className="text-sm font-semibold leading-6 text-gray-900">
                         About
-                    </a>
+                    </Link>
                 </PopoverGroup>
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end space-x-4">
-                    <a href="#" className="text-sm font-semibold leading-6 text-gray-900 ">
+                    <Link to={'/register'} className="text-sm font-semibold leading-6 text-gray-900 ">
                         Register
-                    </a>
-                    <a href="#" className="text-sm font-semibold leading-6 text-gray-900 ">
+                    </Link>
+                    <Link to={'/login'} className="text-sm font-semibold leading-6 text-gray-900 ">
                         Log In
-                    </a>
-                    <ShoppingBagIcon aria-hidden="true" className="h-6 w-6"/>
+                    </Link>
+                    <Link to='/cart'>
+                    <ShoppingBagIcon aria-hidden="true" className="h-6 w-6" />
+                    </Link>
+                    
                 </div>
             </nav>
 
@@ -128,11 +131,11 @@ export default function Example() {
                                         <ChevronDownIcon aria-hidden="true" className="h-5 w-5 flex-none group-data-[open]:rotate-180" />
                                     </DisclosureButton>
                                     <DisclosurePanel className="mt-2 space-y-2">
-                                        {[...products].map((item) => (
+                                        {[...productCategories].map((item) => (
                                             <DisclosureButton
                                                 key={item.name}
-                                                as="a"
-                                                href={item.href}
+                                                as="Link"
+                                                to={`/products/${item.href}`}
                                                 className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-beige-50"
                                             >
                                                 {item.name}
@@ -140,38 +143,38 @@ export default function Example() {
                                         ))}
                                     </DisclosurePanel>
                                 </Disclosure>
-                                <a
-                                    href="#"
+                                <Link
+                                    to={'/product/new-arrivals'}
                                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-beige-50"
                                 >
-                                    New Product
-                                </a>
-                                <a
-                                    href="#"
+                                    New Arrivals
+                                </Link>
+                                <Link
+                                    to="/about"
                                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-beige-50"
                                 >
                                     About
-                                </a>
+                                </Link>
                             </div>
                             <div className="py-6">
-                                <a
-                                    href="#"
+                                <Link
+                                    to="/register"
                                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-beige-50"
                                 >
                                     Register
-                                </a>
-                                <a
-                                    href="#"
+                                </Link>
+                                <Link
+                                    to="/login"
                                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-beige-50"
                                 >
                                     Log In
-                                </a>
-                                <a
-                                    href="#"
+                                </Link>
+                                <Link
+                                    href="/cart"
                                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-beige-50"
                                 >
-                                    <ShoppingBagIcon aria-hidden="true" className="h-6 w-6"/>
-                                </a>
+                                    <ShoppingBagIcon aria-hidden="true" className="h-6 w-6" />
+                                </Link>
 
                             </div>
                         </div>
