@@ -2,18 +2,18 @@
 const categories = [
 {
         name: 'Bikini',
-        imageSrc: 'public\\bikiniCategory.jpg',
+        imageSrc: '\\bikiniCategory.jpg',
         href:'#'
        
     },
     {
       name: 'Underwear',
-      imageSrc:'public\\underwearCategory.jpg',
+      imageSrc:'\\underwearCategory.jpg',
        href:'#'
     },
     {
       name: 'Others',
-      imageSrc:'public\\others..png',
+      imageSrc:'\\others..png',
        href:'#'
     }
 
