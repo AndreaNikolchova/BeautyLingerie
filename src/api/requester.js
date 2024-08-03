@@ -10,8 +10,11 @@ export default async function requester(method,url,data){
         options.body = JSON.stringify(data);
     }
     const responce = await fetch(url,options);
-    
-    const result = responce.json();
+    let result ={};
+   if(!url.includes("/register")){
+     result = responce.json();
+   }
+   
     return result;
 
 }
