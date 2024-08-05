@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import {
     Dialog,
     DialogPanel,
@@ -18,6 +18,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Link } from 'react-router-dom'
+import { AuthContext } from '../../context/AuthContext'
 
 const productCategories = [
     { name: 'Bikini', href: '/bikini' },
@@ -28,8 +29,9 @@ const productCategories = [
 ]
 
 
-export default function Example() {
+export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const {isAuthenticated} = useContext(AuthContext);
 
     return (
         <header className="bg-beige">
@@ -98,6 +100,7 @@ export default function Example() {
                     <ShoppingBagIcon aria-hidden="true" className="h-6 w-6" />
                     </Link>
                     
+                    
                 </div>
             </nav>
 
@@ -134,7 +137,7 @@ export default function Example() {
                                         {[...productCategories].map((item) => (
                                             <DisclosureButton
                                                 key={item.name}
-                                                as="Link"
+                                                 as={Link}
                                                 to={`/products/${item.href}`}
                                                 className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-beige-50"
                                             >
