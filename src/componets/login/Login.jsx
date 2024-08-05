@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { useLogin } from "../../hooks/useAuth"
 import { useForm } from "../../hooks/useForm"
 import { useNavigate } from "react-router-dom";
+import { printErrors } from "../../errorHandling/printErrors";
 
 const initialValues = { email: '', password: '' }
 export default function Login() {
+    const [error, setError] = useState();
     const navigate = useNavigate();
     const login = useLogin();
     const loginHandler = async ({ email, password }) => {
@@ -12,8 +15,11 @@ export default function Login() {
             await login(email, password);
             navigate('/');
         }
-        catch (err) {
-            console.log(err.message);
+        catch (responce) {
+            if(responce.status === 401){
+                setError('Password or email is not correct')
+            }
+
         }
     }
     const { values, changeHandler, submitHandler } = useForm(initialValues, loginHandler);
@@ -53,11 +59,6 @@ export default function Login() {
                                 <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
                                     Password
                                 </label>
-                                <div className="text-sm">
-                                    <a href="#" className="font-semibold text-purple-600 hover:text-purple-500">
-                                        Forgot password?
-                                    </a>
-                                </div>
                             </div>
                             <div className="mt-2">
                                 <input
@@ -71,6 +72,11 @@ export default function Login() {
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
+                        </div>
+                        <div className="text-sm">
+                                    <p className="font-semibold text-purple-600 hover:text-purple-500">
+                                       {error}
+                                    </p>
                         </div>
 
                         <div>

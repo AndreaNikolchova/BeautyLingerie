@@ -12,10 +12,8 @@ export const useLogin = () => {
     return loginHadler;
 }
 export const useRegister  = () =>{
- console.log('inuseReg')
  const registerHandler = async (email,password)=>{
     const result = await register(email, password);
-    console.log(result);
     return result
  }
  return registerHandler;

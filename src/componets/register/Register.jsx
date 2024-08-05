@@ -1,19 +1,27 @@
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+
 import { useRegister } from "../../hooks/useAuth"
 import { useForm } from "../../hooks/useForm"
-import { useNavigate } from "react-router-dom";
+import { printErrors } from "../../errorHandling/printErrors";
 
-const initialValues = { email: '', password: '' }
+const initialValues = { email: '', password: '' , rePassword:''}
 export default function Register() {
+    const [error, setError] = useState();
     const navigate = useNavigate();
     const register = useRegister();
-    const registerHandler = async ({ email, password }) => {
+    const registerHandler = async ({ email, password, rePassword }) => {
         try {
-            await register(email, password);
-            navigate('/login');
+            if(password === rePassword){
+                await register(email, password);
+                navigate('/login');
+            }
+            setError('Passwords do not match')
         }
-        catch (err) {
-            console.log(err.message);
+        catch (responce) {
+           
+            setError(printErrors(responce.errors));
         }
     }
     const { values, changeHandler, submitHandler } = useForm(initialValues, registerHandler);
@@ -66,6 +74,30 @@ export default function Register() {
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
+                        </div>
+                        <div>
+                            <div className="flex items-center justify-between">
+                                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Comfirm password
+                                </label>
+                            </div>
+                            <div className="mt-2">
+                                <input
+                                    id="rePassword"
+                                    name="rePassword"
+                                    type="password"
+                                    required
+                                    autoComplete="current-password"
+                                    value={values.rePassword}
+                                    onChange={changeHandler}
+                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        </div>
+                        <div className="text-sm">
+                                    <p className="font-semibold text-purple-600 hover:text-purple-500">
+                                       {error}
+                                    </p>
                         </div>
 
                         <div>
