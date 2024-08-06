@@ -4,24 +4,26 @@ import { useState } from "react";
 
 import { useRegister } from "../../hooks/useAuth"
 import { useForm } from "../../hooks/useForm"
-import { printErrors } from "../../errorHandling/printErrors";
 
-const initialValues = { email: '', password: '' , rePassword:''}
+
+const initialValues = { firstName: '', lastName: '', email: '', password: '', rePassword: '' }
 export default function Register() {
     const [error, setError] = useState();
     const navigate = useNavigate();
     const register = useRegister();
-    const registerHandler = async ({ email, password, rePassword }) => {
+    const registerHandler = async ({ firstName, lastName, email, password, rePassword }) => {
         try {
-            if(password === rePassword){
-                await register(email, password);
+
+            if (password === rePassword) {
+                await register(firstName, lastName, email, password);
                 navigate('/login');
             }
             setError('Passwords do not match')
         }
         catch (responce) {
-           
-            setError(printErrors(responce.errors));
+          
+             setError(responce.errors);
+            
         }
     }
     const { values, changeHandler, submitHandler } = useForm(initialValues, registerHandler);
@@ -38,6 +40,37 @@ export default function Register() {
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                     <form onSubmit={submitHandler} className="space-y-6">
+                        <div>
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                                First Name
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    id="firstName"
+                                    name="firstName"
+                                    required
+                                    value={values.firstName}
+                                    onChange={changeHandler}
+                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                                Last Name
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    id="lastName"
+                                    name="lastName"
+                                    required
+                                    value={values.lastName}
+                                    onChange={changeHandler}
+                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        </div>
+
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                                 Email address
@@ -95,9 +128,9 @@ export default function Register() {
                             </div>
                         </div>
                         <div className="text-sm">
-                                    <p className="font-semibold text-purple-600 hover:text-purple-500">
-                                       {error}
-                                    </p>
+                            <p className="font-semibold text-purple-600 hover:text-purple-500">
+                                {error}
+                            </p>
                         </div>
 
                         <div>

@@ -1,39 +1,23 @@
-
-
 import { useState } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import { useNavigate } from 'react-router-dom'
+import {useGetProductsAddedToCart } from "../../hooks/useProducts"
 
-const products = [
-  {
-    id: 1,
-    name: 'Throwback Hip Bag',
-    href: '#',
-    color: 'Salmon',
-    price: '$90.00',
-    quantity: 1,
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg',
-    imageAlt: 'Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.',
-  },
-  {
-    id: 2,
-    name: 'Medium Stuff Satchel',
-    href: '#',
-    color: 'Blue',
-    price: '$32.00',
-    quantity: 1,
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg',
-    imageAlt:
-      'Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.',
-  },
-  // More products...
-]
+
 
 export default function Cart() {
   const [open, setOpen] = useState(true)
+  const navigate = useNavigate();
+  const goBack = () => {
+    setOpen(false);
+    navigate(-1);
+  }
+  const [products] = useGetProductsAddedToCart();
+  
 
   return (
-    <Dialog open={open} onClose={setOpen} className="relative z-10">
+    <Dialog open={open} onClose={goBack} className="relative z-10">
       <DialogBackdrop
         transition
         className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0"
@@ -53,7 +37,7 @@ export default function Cart() {
                     <div className="ml-3 flex h-7 items-center">
                       <button
                         type="button"
-                        onClick={() => setOpen(false)}
+                        onClick={goBack}
                         className="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
                       >
                         <span className="absolute -inset-0.5" />
@@ -112,7 +96,7 @@ export default function Cart() {
                   <div className="mt-6">
                     <a
                       href="#"
-                      className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                      className="flex items-center justify-center rounded-md border border-transparent bg-purple-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-purple-700"
                     >
                       Checkout
                     </a>
@@ -122,8 +106,8 @@ export default function Cart() {
                       or{' '}
                       <button
                         type="button"
-                        onClick={() => setOpen(false)}
-                        className="font-medium text-indigo-600 hover:text-indigo-500"
+                        onClick={goBack}
+                        className="font-medium text-purple-600 hover:text-purple-500"
                       >
                         Continue Shopping
                         <span aria-hidden="true"> &rarr;</span>

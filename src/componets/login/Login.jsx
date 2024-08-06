@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useLogin } from "../../hooks/useAuth"
 import { useForm } from "../../hooks/useForm"
 import { useNavigate } from "react-router-dom";
-import { printErrors } from "../../errorHandling/printErrors";
 
 const initialValues = { email: '', password: '' }
 export default function Login() {

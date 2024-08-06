@@ -19,3 +19,9 @@ export const getNewest = async()=>{
 export const getColors = async()=>{
         return await request.get(`${BASE_URL}/Color`);
 }
+export const addToCart= async()=>{
+        return await request.post(`${BASE_URL}/AddToCart`)
+}
+export const getProductsFromCart = async()=>{
+        return await request.get(`${BASE_URL}/Products/Cart`);
+}

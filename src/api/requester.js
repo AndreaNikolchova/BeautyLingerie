@@ -5,17 +5,21 @@ export default async function requester(method, url, data) {
     }
     if (data) {
         options.headers = {
+            ...options.headers,
             'Content-Type': 'application/json',
         };
         options.body = JSON.stringify(data);
     }
+
     const responce = await fetch(url, options);
     let result = {};
     if (!responce.ok) {
-        result = await responce.json();
-        throw result;
+       if(responce.status!==401){
+           result = await responce.json();
+           throw result;
+       }
     }
-    if (!url.includes("/register")) {
+    if (!url.includes("/Customer/Add")) {
         result = await responce.json();
     }
 

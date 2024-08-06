@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import { getAll, getOne, getByCategory, getNewest, getColors } from "../api/products-api";
+import { getAll, getOne, getByCategory, getNewest, getColors,getProductsFromCart } from "../api/products-api";
 
 export function useGetAllProducts() {
     const [products, setProducts] = useState([]);
@@ -46,4 +46,13 @@ export function useGetColors() {
             .then(result => setColors(result));
     }, []);
     return [colors, setColors]
+}
+export function useGetProductsAddedToCart() {
+
+    const [products, setProducts] = useState([]);
+    useEffect(() => {
+        getProductsFromCart()
+            .then(result => setProducts(result));
+    }, []);
+    return [products, setProducts]
 }
