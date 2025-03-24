@@ -1,27 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useCart from "../../hooks/useCart.js";
-const handleCheckout = () => {
-  // Save cart to sessionStorage before checkout
-  const orderData = {
-    items: cartItems,
-    subtotal: calculateSubtotal(),
-    shipping: calculateShipping(),
-    tax: calculateTax(),
-    total: calculateTotal(),
-    timestamp: new Date().toISOString()
-  };
-  
-  // You might want to save this to a temporary orders table in your database
-  // or keep it in sessionStorage until the order is completed
-  sessionStorage.setItem('pendingOrder', JSON.stringify(orderData));
-  
-  // Navigate to checkout
-  // history.push('/checkout');
-};
 
 export default function Cart() {
+  const navigate = useNavigate();
   const {
-    cartItems ,
+    cartItems,
     removeFromCart,
     updateQuantity,
     calculateSubtotal,
@@ -29,6 +12,25 @@ export default function Cart() {
     calculateTotal,
     getItemCount
   } = useCart();
+
+  const handleCheckout = () => {
+    const orderData = {
+      items: cartItems.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        imageUrl: item.imageUrl
+      })),
+      subtotal: calculateSubtotal(),
+      shipping: calculateShipping(),
+      total: calculateTotal(),
+      timestamp: new Date().toISOString()
+    };
+
+    sessionStorage.setItem('pendingOrder', JSON.stringify(orderData));
+    navigate('/checkout');
+  };
 
   return (
     <div className="bg-white">
@@ -127,7 +129,6 @@ export default function Cart() {
                   </span>
                 </div>
                 
-            
                 <div className="flex justify-between py-4">
                   <span className="text-base font-medium text-gray-900">Total</span>
                   <span className="text-base font-medium text-gray-900">
@@ -135,13 +136,12 @@ export default function Cart() {
                   </span>
                 </div>
                 
-                <Link
+                <button
                   onClick={handleCheckout}
-                  to="/checkout"
-                  className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition-colors block text-center"
+                  className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition-colors block text-center"
                 >
                   Proceed to Checkout
-                </Link>
+                </button>
                 
                 <Link
                   to="/products"
