@@ -1,12 +1,13 @@
 
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetOneProduct } from '../../hooks/useProducts'
-
+import useCart from '../../hooks/useCart.js';
 
 import { useState } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel} from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 export default function ProductDetails() {
+  const { addToCart } = useCart();
   const { productId } = useParams();
   const [product] = useGetOneProduct(productId);
   const [open, setOpen] = useState(true)
@@ -61,7 +62,8 @@ export default function ProductDetails() {
                   <section aria-labelledby="options-heading" className="mt-10">
 
                     <button
-                      //onClick={}
+                       
+                       onClick={() => addToCart(product)}
                       className="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-purple-600 px-8 py-3 text-base font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
                     >
                       Add to cart

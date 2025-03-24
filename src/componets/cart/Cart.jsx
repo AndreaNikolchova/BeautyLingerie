@@ -1,125 +1,159 @@
-import { useState } from 'react'
-import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import { useNavigate } from 'react-router-dom'
-import {useGetProductsAddedToCart } from "../../hooks/useProducts"
-
-
+import { Link } from "react-router-dom";
+import useCart from "../../hooks/useCart.js";
+const handleCheckout = () => {
+  // Save cart to sessionStorage before checkout
+  const orderData = {
+    items: cartItems,
+    subtotal: calculateSubtotal(),
+    shipping: calculateShipping(),
+    tax: calculateTax(),
+    total: calculateTotal(),
+    timestamp: new Date().toISOString()
+  };
+  
+  // You might want to save this to a temporary orders table in your database
+  // or keep it in sessionStorage until the order is completed
+  sessionStorage.setItem('pendingOrder', JSON.stringify(orderData));
+  
+  // Navigate to checkout
+  // history.push('/checkout');
+};
 
 export default function Cart() {
-  const [open, setOpen] = useState(true)
-  const navigate = useNavigate();
-  const goBack = () => {
-    setOpen(false);
-    navigate(-1);
-  }
-  const [products] = useGetProductsAddedToCart();
-  
+  const {
+    cartItems ,
+    removeFromCart,
+    updateQuantity,
+    calculateSubtotal,
+    calculateShipping,
+    calculateTotal,
+    getItemCount
+  } = useCart();
 
   return (
-    <Dialog open={open} onClose={goBack} className="relative z-10">
-      <DialogBackdrop
-        transition
-        className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0"
-      />
-
-      <div className="fixed inset-0 overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
-            <DialogPanel
-              transition
-              className="pointer-events-auto w-screen max-w-md transform transition duration-500 ease-in-out data-[closed]:translate-x-full sm:duration-700"
+    <div className="bg-white">
+      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900 mb-8">
+          Your Shopping Cart ({getItemCount()} items)
+        </h1>
+        
+        {cartItems.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-lg text-gray-700 mb-4">Your cart is empty</p>
+            <Link 
+              to="/products" 
+              className="inline-block bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 transition-colors"
             >
-              <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
-                <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
-                  <div className="flex items-start justify-between">
-                    <DialogTitle className="text-lg font-medium text-gray-900">Shopping cart</DialogTitle>
-                    <div className="ml-3 flex h-7 items-center">
-                      <button
-                        type="button"
-                        onClick={goBack}
-                        className="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
+              Continue Shopping
+            </Link>
+          </div>
+        ) : (
+          <div className="lg:grid lg:grid-cols-12 lg:gap-x-12">
+            <div className="lg:col-span-8">
+              <div className="hidden lg:grid lg:grid-cols-12 lg:gap-x-8 lg:border-b lg:border-gray-200 lg:pb-4 lg:mb-4">
+                <div className="lg:col-span-6 text-sm font-medium text-gray-500">Product</div>
+                <div className="lg:col-span-2 text-sm font-medium text-gray-500">Price</div>
+                <div className="lg:col-span-2 text-sm font-medium text-gray-500">Quantity</div>
+                <div className="lg:col-span-2 text-sm font-medium text-gray-500">Total</div>
+              </div>
+              
+              {cartItems.map((item) => (
+                <div key={item.id} className="grid grid-cols-1 gap-y-4 lg:grid-cols-12 lg:gap-x-8 lg:border-b lg:border-gray-200 lg:pb-8 lg:mb-8">
+                  <div className="lg:col-span-6">
+                    <div className="flex items-center gap-4">
+                      <img
+                        src={item.imageUrl || 'https://via.placeholder.com/80'}
+                        alt={item.name}
+                        className="h-20 w-20 rounded-md object-cover object-center"
+                      />
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
+                        <button
+                          onClick={() => removeFromCart(item.id)}
+                          className="text-sm text-red-600 hover:text-red-800 mt-1"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="lg:col-span-2">
+                    <p className="text-sm text-gray-900">${item.price?.toFixed(2)}</p>
+                  </div>
+                  
+                  <div className="lg:col-span-2">
+                    <div className="flex items-center gap-2">
+                      <button 
+                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-100"
                       >
-                        <span className="absolute -inset-0.5" />
-                        <span className="sr-only">Close panel</span>
-                        <XMarkIcon aria-hidden="true" className="h-6 w-6" />
+                        -
+                      </button>
+                      <span className="w-8 text-center">{item.quantity}</span>
+                      <button 
+                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-100"
+                      >
+                        +
                       </button>
                     </div>
                   </div>
-
-                  <div className="mt-8">
-                    <div className="flow-root">
-                      <ul role="list" className="-my-6 divide-y divide-gray-200">
-                        {products.map((product) => (
-                          <li key={product.id} className="flex py-6">
-                            <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                              <img
-                                alt={product.imageAlt}
-                                src={product.imageSrc}
-                                className="h-full w-full object-cover object-center"
-                              />
-                            </div>
-
-                            <div className="ml-4 flex flex-1 flex-col">
-                              <div>
-                                <div className="flex justify-between text-base font-medium text-gray-900">
-                                  <h3>
-                                    <a href={product.href}>{product.name}</a>
-                                  </h3>
-                                  <p className="ml-4">{product.price}</p>
-                                </div>
-                                <p className="mt-1 text-sm text-gray-500">{product.color}</p>
-                              </div>
-                              <div className="flex flex-1 items-end justify-between text-sm">
-                                <p className="text-gray-500">Qty {product.quantity}</p>
-
-                                <div className="flex">
-                                  <button type="button" className="font-medium text-indigo-600 hover:text-indigo-500">
-                                    Remove
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-                  <div className="flex justify-between text-base font-medium text-gray-900">
-                    <p>Subtotal</p>
-                    <p>$262.00</p>
-                  </div>
-                  <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
-                  <div className="mt-6">
-                    <a
-                      href="#"
-                      className="flex items-center justify-center rounded-md border border-transparent bg-purple-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-purple-700"
-                    >
-                      Checkout
-                    </a>
-                  </div>
-                  <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
-                    <p>
-                      or{' '}
-                      <button
-                        type="button"
-                        onClick={goBack}
-                        className="font-medium text-purple-600 hover:text-purple-500"
-                      >
-                        Continue Shopping
-                        <span aria-hidden="true"> &rarr;</span>
-                      </button>
+                  
+                  <div className="lg:col-span-2">
+                    <p className="text-sm font-medium text-gray-900">
+                      ${((item.price || 0) * item.quantity).toFixed(2)}
                     </p>
                   </div>
                 </div>
+              ))}
+            </div>
+            
+            <div className="lg:col-span-4 mt-8 lg:mt-0">
+              <div className="bg-gray-50 p-6 rounded-lg">
+                <h2 className="text-lg font-medium text-gray-900 mb-4">Order Summary</h2>
+                
+                <div className="flex justify-between py-2 border-b border-gray-200">
+                  <span className="text-sm text-gray-600">Subtotal</span>
+                  <span className="text-sm font-medium text-gray-900">
+                    ${calculateSubtotal().toFixed(2)}
+                  </span>
+                </div>
+                
+                <div className="flex justify-between py-2 border-b border-gray-200">
+                  <span className="text-sm text-gray-600">Shipping</span>
+                  <span className="text-sm font-medium text-gray-900">
+                    {calculateShipping() === 0 ? 'Free' : '$15.00'}
+                  </span>
+                </div>
+                
+            
+                <div className="flex justify-between py-4">
+                  <span className="text-base font-medium text-gray-900">Total</span>
+                  <span className="text-base font-medium text-gray-900">
+                    ${calculateTotal().toFixed(2)}
+                  </span>
+                </div>
+                
+                <Link
+                  onClick={handleCheckout}
+                  to="/checkout"
+                  className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition-colors block text-center"
+                >
+                  Proceed to Checkout
+                </Link>
+                
+                <Link
+                  to="/products"
+                  className="w-full bg-white text-gray-700 py-2 px-4 rounded-md border border-gray-300 hover:bg-gray-50 transition-colors block text-center mt-2"
+                >
+                  Continue Shopping
+                </Link>
               </div>
-            </DialogPanel>
+            </div>
           </div>
-        </div>
+        )}
       </div>
-    </Dialog>
-  )
+    </div>
+  );
 }

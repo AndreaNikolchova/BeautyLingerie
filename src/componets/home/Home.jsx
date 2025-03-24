@@ -1,20 +1,19 @@
-
 const categories = [
 {
         name: 'Bikini',
         imageSrc: '\\bikiniCategory.jpg',
-        href:'#'
+        href:'/products/bikini'
        
     },
     {
       name: 'Underwear',
       imageSrc:'\\underwearCategory.jpg',
-       href:'#'
+       href:'/products/underwear'
     },
     {
       name: 'Others',
       imageSrc:'\\others..png',
-       href:'#'
+       href:'/products/others'
     }
 
   ]

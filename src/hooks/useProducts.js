@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 
-import { getAll, getOne, getByCategory, getNewest, getColors,getProductsFromCart } from "../api/products-api";
+import { getAll, getOne, getByCategory, getNewest, getColors, getProductsFromCart } from "../api/products-api";
 
 export function useGetAllProducts() {
     const [products, setProducts] = useState([]);

@@ -5,6 +5,7 @@ import Header from './componets/header/Header';
 import Home from './componets/home/Home';
 import ProductDetails from './componets/products-details/ProductsDetails';
 import Cart from './componets/cart/Cart';
+import Checkout from './componets/checkout/Checkout';
 import Login from './componets/login/Login';
 import Register from './componets/register/Register';
 import { AuthContext } from './context/AuthContext';
@@ -41,6 +42,7 @@ function App() {
           
           <Route path='/products/:productId/details' element={<ProductDetails />} />
           <Route path='/cart' element={<Cart />} />
+          <Route path='/checkout' element={<Checkout />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
         </Routes>
