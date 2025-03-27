@@ -6,7 +6,7 @@ export const login = async(email,password) => {
     const authData = await post(`${BASE_URL}/login`,{email,password});
     return authData;
 }
-export const register = async(firstName,lastName,email,password) => {
-    const result = await post(`${BASE_URL}/Customer/Add`,{firstName,lastName,email,password});
+export const register = async(email,password) => {
+    const result = await post(`${BASE_URL}/register`,{email,password});
     return result;
 }

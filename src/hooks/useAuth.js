@@ -12,9 +12,8 @@ export const useLogin = () => {
     return loginHadler;
 }
 export const useRegister  = () =>{
- const registerHandler = async (firstName,lastName,email,password)=>{
-    const result = await register(firstName,lastName,email, password);
-    console.log(result);
+ const registerHandler = async (email,password)=>{
+    const result = await register(email, password);
     return result
  }
  return registerHandler;

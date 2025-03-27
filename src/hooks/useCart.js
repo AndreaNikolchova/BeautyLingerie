@@ -17,7 +17,7 @@ export default function useCart() {
     }
   }, [cartItems]);
 
-  const addToCart = (product, quantity = 1) => {
+  const addToCart = (product, quantityCart = 1) => {
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === product.id);
       
@@ -26,7 +26,7 @@ export default function useCart() {
           item.id === product.id
             ? { 
                 ...item, 
-                quantity: item.quantity + quantity,
+                quantityCart: item.quantityCart + quantityCart,
                 price: Number(product.price) || 0
               }
             : item
@@ -37,7 +37,7 @@ export default function useCart() {
         ...prevItems, 
         { 
           ...product, 
-          quantity,
+          quantityCart,
           price: Number(product.price) || 0
         }
       ];
@@ -64,7 +64,7 @@ export default function useCart() {
   const calculateSubtotal = () => {
     return cartItems.reduce((total, item) => {
       const price = Number(item.price) || 0;
-      const quantity = Number(item.quantity) || 0;
+      const quantity = Number(item.quantityCart) || 0;
       return total + (price * quantity);
     }, 0);
   };
@@ -81,7 +81,7 @@ export default function useCart() {
 
   const getItemCount = () => {
     return cartItems.reduce((count, item) => {
-      const quantity = Number(item.quantity) || 0;
+      const quantity = Number(item.quantityCart) || 0;
       return count + quantity;
     }, 0);
   };
