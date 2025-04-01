@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 
 export default function useCart() {
- 
+  const navigate = useNavigate();
   const [cartItems, setCartItems] = useState(() => {
     if (typeof window !== 'undefined') {
       const savedCart = sessionStorage.getItem('cart');
@@ -88,6 +89,25 @@ export default function useCart() {
       return count + quantity;
     }, 0);
   };
+  const handleCheckout = (cartProducts) => {
+      
+    const orderData = {
+        items: cartProducts.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            imageUrl: item.imageUrl
+        })),
+        subtotal: calculateSubtotal(),
+        shipping: calculateShipping(),
+        total: calculateTotal(),
+        timestamp: new Date().toISOString()
+    };
+
+    sessionStorage.setItem('pendingOrder', JSON.stringify(orderData));
+    navigate('/checkout');
+};
 
   return {
     cartItems,
@@ -99,5 +119,6 @@ export default function useCart() {
     calculateShipping,
     calculateTotal,
     getItemCount,
+    handleCheckout
   };
 }
