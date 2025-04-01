@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import useCart from '../../hooks/useCart.js';
 import { Link } from 'react-router-dom';
+import { postOrder } from '../../api/order-api.js';
 
 export default function Checkout() {
   const { clearCart } = useCart();
   const [order, setOrder] = useState(null);
   const [customerInfo, setCustomerInfo] = useState({
-    name: '',
+    fullName: '',
     email: '',
     address: ''
   });
@@ -25,22 +26,13 @@ export default function Checkout() {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch('/api/orders/guest', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...order,
-          customer: customerInfo
-        }),
-      });
-
-      if (response.ok) {
-        clearCart();
-        sessionStorage.removeItem('pendingOrder');
-        setOrderSuccess(true);
-      }
+      await postOrder(JSON.stringify({
+        ...order,
+        ...customerInfo, 
+      }));
+    
+     
+    
     } catch (error) {
       console.error('Order submission failed:', error);
     } finally {
@@ -92,7 +84,7 @@ export default function Checkout() {
           <div className="px-4 py-5 sm:p-6">
             <div className="flow-root">
               <ul className="-my-4 divide-y divide-gray-200">
-                {order.items.map((item) => (
+                {order.products.map((item) => (
                   <li key={item.id} className="py-4 flex">
                     <div className="flex-shrink-0">
                       <img
@@ -144,8 +136,8 @@ export default function Checkout() {
                 <input
                   type="text"
                   id="name"
-                  value={customerInfo.name}
-                  onChange={(e) => setCustomerInfo({...customerInfo, name: e.target.value})}
+                  value={customerInfo.fullName}
+                  onChange={(e) => setCustomerInfo({...customerInfo, fullName: e.target.value})}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   placeholder="John Doe"
                   required

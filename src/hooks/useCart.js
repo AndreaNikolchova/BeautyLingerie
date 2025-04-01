@@ -92,7 +92,7 @@ export default function useCart() {
   const handleCheckout = (cartProducts) => {
       
     const orderData = {
-        items: cartProducts.map(item => ({
+        products: cartProducts.map(item => ({
             id: item.id,
             name: item.name,
             price: item.price,

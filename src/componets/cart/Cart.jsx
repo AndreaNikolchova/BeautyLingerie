@@ -7,7 +7,6 @@ export default function Cart() {
  
   const {
     cartItems,
-    getItemCount
   } = useCart();
 
 
