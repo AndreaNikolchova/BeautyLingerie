@@ -12,53 +12,15 @@ export default function CartItem(props) {
         calculateTotal,
         cartItems
     } = useCart();
-    
-    // Use local state that syncs with both props.items and cartItems
+
+
     const [displayItems, setDisplayItems] = useState(props.items || cartItems);
 
-    // Sync with cartItems when they change
+
     useEffect(() => {
         setDisplayItems(cartItems);
     }, [cartItems]);
 
-    // If props.items changes (from parent), update display items
-    useEffect(() => {
-        if (props.items) {
-            setDisplayItems(props.items);
-        }
-    }, [props.items]);
-
-    const handleRemove = async (itemId) => {
-        try {
-            await removeFromCart(itemId);
-            // Optimistic update
-            setDisplayItems(prev => prev.filter(item => item.id !== itemId));
-        } catch (error) {
-            console.error("Failed to remove item:", error);
-            // Revert if needed
-            setDisplayItems(cartItems);
-        }
-    };
-
-    const handleQuantityChange = async (itemId, newQuantity) => {
-        // Validate quantity
-        newQuantity = Math.max(1, newQuantity);
-        
-        try {
-            // Optimistic update
-            setDisplayItems(prev => 
-                prev.map(item => 
-                    item.id === itemId ? { ...item, quantity: newQuantity } : item
-                )
-            );
-            
-            await updateQuantity(itemId, newQuantity);
-        } catch (error) {
-            console.error("Failed to update quantity:", error);
-            // Revert if needed
-            setDisplayItems(cartItems);
-        }
-    };
 
     const handleCheckout = () => {
         if (displayItems.length === 0) {
@@ -120,7 +82,7 @@ export default function CartItem(props) {
                                 <div>
                                     <h3 className="text-sm font-medium text-gray-900">{item.name}</h3>
                                     <button
-                                        onClick={() => handleRemove(item.id)}
+                                        onClick={() => removeFromCart(item.id)}
                                         className="text-sm text-red-600 hover:text-red-800 mt-1 focus:outline-none"
                                     >
                                         Remove
@@ -130,33 +92,45 @@ export default function CartItem(props) {
                         </div>
 
                         <div className="lg:col-span-2 flex items-center">
-                            <p className="text-sm text-gray-900">${item.price?.toFixed(2)}</p>
+                            <p className="text-sm text-gray-900">{item.price?.toFixed(2)} lv</p>
                         </div>
 
-                        <div className="lg:col-span-2 flex items-center">
+                        <div className="lg:col-span-2 flex flex-col items-center justify-center mt-5">
                             <div className="flex items-center gap-2">
                                 <button
-                                    onClick={() => handleQuantityChange(item.id, item.quantityCart - 1)}
+                                    onClick={() => updateQuantity(item.id, item.quantity - 1, item.quantityAll)}
                                     className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-100 focus:outline-none"
                                     disabled={item.quantity <= 1}
                                 >
                                     -
                                 </button>
-                                <span className="w-8 text-center">{item.quantityCart}</span>
+
+                                <span className="w-8 text-center">{item.quantity}</span>
+
                                 <button
-                                    onClick={() => handleQuantityChange(item.id, item.quantityCart + 1)}
+                                    onClick={() => updateQuantity(item.id, item.quantity + 1, item.quantityAll)}
                                     className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-100 focus:outline-none"
+                                    disabled={item.quantity >= item.quantityAll}
                                 >
                                     +
                                 </button>
                             </div>
+
+                          
+                            <div className="h-4 mt-1">
+                                {item.quantity >= item.quantityAll && (
+                                    <span className="text-red-500 text-xs italic">Max quantity reached</span>
+                                )}
+                            </div>
                         </div>
+
 
                         <div className="lg:col-span-2 flex items-center">
                             <p className="text-sm font-medium text-gray-900">
-                                ${((item.price || 0) * item.quantityCart).toFixed(2)}
+                                {((item.price || 0) * item.quantity).toFixed(2)} lv
                             </p>
                         </div>
+
                     </div>
                 ))}
             </div>
@@ -168,21 +142,21 @@ export default function CartItem(props) {
                     <div className="flex justify-between py-2 border-b border-gray-200">
                         <span className="text-sm text-gray-600">Subtotal</span>
                         <span className="text-sm font-medium text-gray-900">
-                            ${calculateSubtotal().toFixed(2)}
+                            {calculateSubtotal().toFixed(2)} lv
                         </span>
                     </div>
 
                     <div className="flex justify-between py-2 border-b border-gray-200">
                         <span className="text-sm text-gray-600">Shipping</span>
                         <span className="text-sm font-medium text-gray-900">
-                            {calculateShipping() === 0 ? 'Free' : `$${calculateShipping().toFixed(2)}`}
+                            {calculateShipping() === 0 ? 'Free' : `${calculateShipping().toFixed(2)} lv`}
                         </span>
                     </div>
 
                     <div className="flex justify-between py-4">
                         <span className="text-base font-medium text-gray-900">Total</span>
                         <span className="text-base font-medium text-gray-900">
-                            ${calculateTotal().toFixed(2)}
+                            {calculateTotal().toFixed(2)} lv
                         </span>
                     </div>
 

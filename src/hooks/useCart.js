@@ -17,7 +17,7 @@ export default function useCart() {
     }
   }, [cartItems]);
 
-  const addToCart = (product, quantityCart = 1) => {
+  const addToCart = (product, quantity = 1) => {
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === product.id);
       
@@ -26,7 +26,7 @@ export default function useCart() {
           item.id === product.id
             ? { 
                 ...item, 
-                quantityCart: item.quantityCart + quantityCart,
+                quantity: item.quantity + quantity,
                 price: Number(product.price) || 0
               }
             : item
@@ -37,7 +37,7 @@ export default function useCart() {
         ...prevItems, 
         { 
           ...product, 
-          quantityCart,
+          quantity,
           price: Number(product.price) || 0
         }
       ];
@@ -48,13 +48,16 @@ export default function useCart() {
     setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
   };
 
-  const updateQuantity = (productId, newQuantity) => {
-    const quantity = Math.max(1, newQuantity);
-    setCartItems(prevItems =>
-      prevItems.map(item =>
-        item.id === productId ? { ...item, quantity } : item
-      )
-    );
+  const updateQuantity = (productId, newQuantity, quantityAll) => {
+    if(newQuantity<=quantityAll){
+      const quantity = Math.max(1, newQuantity);
+      setCartItems(prevItems =>
+        prevItems.map(item =>
+          item.id === productId ? { ...item, quantity } : item
+        )
+      );
+    }
+
   };
 
   const clearCart = () => {
@@ -64,7 +67,7 @@ export default function useCart() {
   const calculateSubtotal = () => {
     return cartItems.reduce((total, item) => {
       const price = Number(item.price) || 0;
-      const quantity = Number(item.quantityCart) || 0;
+      const quantity = Number(item.quantity) || 0;
       return total + (price * quantity);
     }, 0);
   };
@@ -81,7 +84,7 @@ export default function useCart() {
 
   const getItemCount = () => {
     return cartItems.reduce((count, item) => {
-      const quantity = Number(item.quantityCart) || 0;
+      const quantity = Number(item.quantity) || 0;
       return count + quantity;
     }, 0);
   };
