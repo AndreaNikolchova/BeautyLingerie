@@ -1,73 +1,20 @@
-import { useEffect, useState } from 'react';
-import useCart from '../../hooks/useCart.js';
-import { Link } from 'react-router-dom';
-import { postOrder } from '../../api/order-api.js';
+import  ConfirmedOrder   from '../checkout/confirmed-order/ConfirmedOrder.jsx';
+import LoadingOrder from '../checkout/loading-order/LoadingOrder.jsx';
+import useCheckout from '../../hooks/useChekout.js';
 
 export default function Checkout() {
-  const { clearCart } = useCart();
-  const [order, setOrder] = useState(null);
-  const [customerInfo, setCustomerInfo] = useState({
-    fullName: '',
-    email: '',
-    address: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [orderSuccess, setOrderSuccess] = useState(false);
+  const {
+    order,
+    customerInfo,
+    setCustomerInfo,
+    isSubmitting,
+    orderSuccess,
+    handleSubmit,
+  } = useCheckout();
 
-  useEffect(() => {
-    const savedOrder = sessionStorage.getItem('pendingOrder');
-    if (savedOrder) {
-      setOrder(JSON.parse(savedOrder));
-    }
-  }, []);
+  if (!order && !orderSuccess) return <LoadingOrder />;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    try {
-      await postOrder(JSON.stringify({
-        ...order,
-        ...customerInfo, 
-      }));
-    
-     
-    
-    } catch (error) {
-      console.error('Order submission failed:', error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  if (!order) return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="text-center">
-        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full text-blue-600 mb-4"></div>
-        <p>Loading your order...</p>
-      </div>
-    </div>
-  );
-
-  if (orderSuccess) return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md text-center">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-          </svg>
-        </div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">Order Confirmed!</h2>
-        <p className="text-gray-600 mb-6">Thank you for your purchase. We've sent a confirmation to your email.</p>
-        <Link
-          to="/products"
-          className="inline-block bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition-colors"
-        >
-          Continue Shopping
-        </Link>
-      </div>
-    </div>
-  );
+  if (orderSuccess) return <ConfirmedOrder />;
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -143,6 +90,20 @@ export default function Checkout() {
                   required
                 />
               </div>
+              <div>
+                <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
+                  Phone Number
+                </label>
+                <input
+                  type="text"
+                  id="phoneNumber"
+                  value={customerInfo.phoneNumber}
+                  onChange={(e) => setCustomerInfo({...customerInfo, phoneNumber: e.target.value})}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  placeholder="0892873649"
+                  required
+                />
+              </div>
 
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -166,8 +127,8 @@ export default function Checkout() {
                 <textarea
                   id="address"
                   rows={4}
-                  value={customerInfo.address}
-                  onChange={(e) => setCustomerInfo({...customerInfo, address: e.target.value})}
+                  value={customerInfo.shippingAddress}
+                  onChange={(e) => setCustomerInfo({...customerInfo, shippingAddress: e.target.value})}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   placeholder="123 Main St, City, Country"
                   required
