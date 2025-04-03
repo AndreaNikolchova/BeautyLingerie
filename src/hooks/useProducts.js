@@ -8,6 +8,7 @@ export function useGetAllProducts() {
         getAll()
             .then(result => setProducts(result));
     }, []);
+ 
     return [products, setProducts]
 }
 export function useGetProductsByCategory(categoryName) {
