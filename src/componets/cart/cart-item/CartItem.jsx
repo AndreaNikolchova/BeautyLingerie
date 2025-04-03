@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import useCart from "../../../hooks/useCart.js";
-import { Link,  } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function CartItem(props) {
     const {
@@ -9,18 +9,20 @@ export default function CartItem(props) {
         calculateSubtotal,
         calculateShipping,
         calculateTotal,
-        handleCheckout
+        handleCheckout,
+        cartItems
     } = useCart();
 
 
-    const [products, setItems] = useState(props.items);
+    const [displayItems, setDisplayItems] = useState(props.items || cartItems);
 
 
     useEffect(() => {
-        setItems(props.items);
-    }, [props.items]);
+        setDisplayItems(cartItems);
+    }, [cartItems]);
 
-    if (products.length === 0) {
+
+    if (!displayItems || displayItems.length === 0) {
         return (
             <div className="text-center py-12">
                 <h2 className="text-xl font-medium text-gray-900">Your cart is empty</h2>
@@ -44,7 +46,7 @@ export default function CartItem(props) {
                     <div className="lg:col-span-2 text-sm font-medium text-gray-500">Total</div>
                 </div>
 
-                {products.map((item) => (
+                {displayItems.map((item) => (
                     <div key={item.id} className="grid grid-cols-1 gap-y-4 lg:grid-cols-12 lg:gap-x-8 lg:border-b lg:border-gray-200 lg:pb-8 lg:mb-8">
                         <div className="lg:col-span-6">
                             <div className="flex items-center gap-4">
@@ -135,7 +137,7 @@ export default function CartItem(props) {
                     </div>
 
                     <button
-                        onClick={()=>handleCheckout(products)}
+                        onClick={()=>handleCheckout(cartItems)}
                         className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition-colors block text-center focus:outline-none focus:ring-2 focus:ring-purple-500"
                     >
                         Proceed to Checkout
