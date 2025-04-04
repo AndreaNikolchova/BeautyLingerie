@@ -23,11 +23,15 @@ export function useGetProductsByCategory(categoryName) {
 
 
 export function useGetOneProduct(productId) {
+
     const [product, setProduct] = useState({});
     useEffect(() => {
         getOne(productId)
-            .then(result => setProduct(result));
+            .then(result => {
+                setProduct(result);
+            });
     }, [productId]);
+ 
     return [product, setProduct];
 }
 export function useGetNewestArrivals() {

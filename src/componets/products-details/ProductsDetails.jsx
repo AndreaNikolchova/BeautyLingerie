@@ -1,82 +1,174 @@
-
 import { useNavigate, useParams } from 'react-router-dom';
-import { useGetOneProduct } from '../../hooks/useProducts'
-import useCart from '../../hooks/useCart.js';
-import { ToastContainer } from 'react-toastify';
-import { useState } from 'react'
-import { Dialog, DialogBackdrop, DialogPanel} from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { useGetOneProduct } from '../../hooks/useProducts';
+import useCart from '../../hooks/useCart';
+import { ToastContainer, toast } from 'react-toastify';
+import { useState, useEffect } from 'react';
+import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
+import { XMarkIcon } from '@heroicons/react/24/outline';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function ProductDetails() {
-  const { addToCart } = useCart();
   const { productId } = useParams();
-  const [product] = useGetOneProduct(productId);
-  const [open, setOpen] = useState(true)
+  const [ product ] = useGetOneProduct(productId);
+  const { addToCart } = useCart();
+  const [open, setOpen] = useState(true);
+  const [selectedSize, setSelectedSize] = useState('');
+  const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
 
   const goBack = () => {
     setOpen(false);
     navigate(-1);
+  };
+
+  const handleAddToCart = () => {
+    if (!selectedSize) {
+      toast.error('Please select a size');
+      return;
+    }
+
+    const sizeInfo = product.sizes.find(s => s.sizeName === selectedSize);
+    if (!sizeInfo) {
+      toast.error('Invalid size selection');
+      return;
+    }
+
+    if (quantity < 1 || quantity > sizeInfo.quantity) {
+      toast.error(`Please enter a valid quantity (1-${sizeInfo.quantity})`);
+      return;
+    }
+
+    addToCart({
+      ...product,
+      selectedSize,
+      price: Number(product.price),
+      maxQuantity: sizeInfo.quantity
+    }, quantity);
+
+    toast.success(`${product.name} (${selectedSize}) added to cart`);
+    setSelectedSize('');
+    setQuantity(1);
+  };
+
+  const handleSizeChange = (size) => {
+    setSelectedSize(size);
+    setQuantity(1);
+  };
+
+  if (!product || Object.keys(product).length === 0) {
+    return <p>Loading...</p>;
   }
 
   return (
     <Dialog open={open} onClose={goBack} className="relative z-10">
-      <DialogBackdrop
-        transition
-        className="fixed inset-0 hidden bg-gray-500 bg-opacity-75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in md:block"
-      />
-
+      <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-        <div className="flex min-h-full items-stretch justify-center text-center md:items-center md:px-2 lg:px-4">
-          <DialogPanel
-            transition
-            className="flex w-full transform text-left text-base transition data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in md:my-8 md:max-w-2xl md:px-4 data-[closed]:md:translate-y-0 data-[closed]:md:scale-95 lg:max-w-4xl"
-          >
-            <div className="relative flex w-full items-center overflow-hidden bg-white px-4 pb-8 pt-14 shadow-2xl sm:px-6 sm:pt-8 md:p-6 lg:p-8">
-              <button
-                type="button"
-                onClick={goBack}
-                className="absolute right-4 top-4 text-gray-400 hover:text-gray-500 sm:right-6 sm:top-8 md:right-6 md:top-6 lg:right-8 lg:top-8"
-              >
-                <span className="sr-only">Close</span>
-                <XMarkIcon aria-hidden="true" className="h-6 w-6" />
-              </button>
+        <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+          <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl">
+            <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+              <div className="absolute right-0 top-0 pr-4 pt-4">
+                <button
+                  type="button"
+                  className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none"
+                  onClick={goBack}
+                >
+                  <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                </button>
+              </div>
+              <div className="sm:flex sm:items-start">
+                <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                  <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+                    <div className="overflow-hidden rounded-lg">
+                      <img
+                        src={product.imageUrl}
+                        alt={product.name}
+                        className="h-full w-full object-cover object-center"
+                      />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-semibold leading-6 text-gray-900">
+                        {product.name}
+                      </h3>
+                      <p className="mt-1 text-sm text-gray-500">
+                        {product.categoryName}
+                      </p>
+                      <p className="mt-2 text-2xl font-bold text-gray-900">
+                        {product.price.toFixed(2)} lv.
+                      </p>
+                      <p className="mt-2 text-sm text-gray-700">
+                        {product.description}
+                      </p>
+                      <p className="mt-2 text-sm text-gray-700">
+                        Color: {product.colorName}
+                      </p>
 
-              <div className="grid w-full grid-cols-1 items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8">
-                <div className="aspect-h-3 aspect-w-2 overflow-hidden rounded-lg bg-gray-100 sm:col-span-4 lg:col-span-5">
-                  <img alt={product.imageAlt} src={product.imageUrl} className="object-cover object-center" />
-                </div>
-                <div className="sm:col-span-8 lg:col-span-7">
-                  <h2 className="text-2xl font-bold text-gray-900 sm:pr-12">{product.name}</h2>
+                      <div className="mt-4">
+                        <h4 className="text-sm font-medium text-gray-900">Size</h4>
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {product.sizes.map((size) => (
+                            <button
+                              key={size.sizeName}
+                              type="button"
+                              onClick={() => handleSizeChange(size.sizeName)}
+                              className={`inline-flex items-center rounded-md px-3 py-2 text-sm font-medium shadow-sm ${
+                                selectedSize === size.sizeName
+                                  ? 'bg-purple-600 text-white'
+                                  : 'bg-white text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
+                              }`}
+                            >
+                              {size.sizeName}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
 
-                  <section aria-labelledby="information-heading" className="mt-2">
-                    <h3 id="information-heading" className="sr-only">
-                      Product information
-                    </h3>
+                      {selectedSize && (
+                        <div className="mt-4">
+                          <label htmlFor="quantity" className="block text-sm font-medium text-gray-700">
+                            Quantity
+                          </label>
+                          <input
+                            type="number"
+                            id="quantity"
+                            min="1"
+                            max={product.sizes.find(s => s.sizeName === selectedSize)?.quantity || 0}
+                            value={quantity}
+                            onChange={(e) => {
+                              const maxQty = product.sizes.find(s => s.sizeName === selectedSize)?.quantity || 0;
+                              const inputValue = Number(e.target.value);
+                              setQuantity(Math.max(1, Math.min(inputValue, maxQty)));
+                            }}
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500 sm:text-sm"
+                          />
+                          <p className="mt-1 text-xs text-gray-500">
+                            Available: {product.sizes.find(s => s.sizeName === selectedSize)?.quantity || 0}
+                          </p>
+                        </div>
+                      )}
 
-                    <p className="text-2xl text-gray-900 mb-4">{product.price} lv.</p>
-                    <p className="text-lg text-black-900">Color : {product.colorName}</p>
-                    <p className="text-lg text-black-900">Size : {product.size}</p>
-
-                  </section>
-
-                  <section aria-labelledby="options-heading" className="mt-10">
-
-                    <button
-                       
-                       onClick={() => addToCart(product)}
-                      className="mt-6 flex w-full items-center justify-center rounded-md border border-transparent bg-purple-600 px-8 py-3 text-base font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
-                    >
-                      Add to cart
-                    </button>
-                  </section>
+                      <div className="mt-6">
+                        <button
+                          type="button"
+                          onClick={handleAddToCart}
+                          disabled={!selectedSize}
+                          className={`inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm ${
+                            selectedSize
+                              ? 'bg-purple-600 hover:bg-purple-500'
+                              : 'bg-gray-400 cursor-not-allowed'
+                          } focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600`}
+                        >
+                          Add to cart
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </DialogPanel>
         </div>
       </div>
-                  <ToastContainer />
+      <ToastContainer position="top-right" autoClose={2000} />
     </Dialog>
-  )
+  );
 }

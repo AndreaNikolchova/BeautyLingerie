@@ -27,24 +27,9 @@ export default function useCart() {
             
             const currentQty = existingItem ? existingItem.quantity : 0;
             const newQty = Math.min(currentQty + quantity, availableQuantity);
-            const reachedMax = newQty >= availableQuantity;
+ 
     
-            setTimeout(() => {
-                if (reachedMax) {
-                  toast.warning(`Added all ${availableQuantity} (max available)`, {
-                    position: "top-right",
-                    autoClose: 2000,
-                    icon: '⚠️' 
-                  });
-                } else {
-                  toast.success("Added to cart", {
-                    position: "top-right",
-                    autoClose: 2000,
-                    icon: '✅'
-                  });
-                }
-              }, 0);
-          
+   
 
             if (existingItem) {
                 return prevItems.map(item =>

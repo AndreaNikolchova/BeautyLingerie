@@ -19,7 +19,6 @@ export default async function requester(method, url, data) {
         }
     }
     if (method !== 'POST') {
-       
         return result = await responce.json();
     }
 

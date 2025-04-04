@@ -10,8 +10,8 @@ export const getAll = async () => {
 export const getByCategory = async (categoryName) => {
         return await request.get(`${BASE_URL}/Products/Category/${categoryName}`);
 }
-export const getOne = async (id) => {
-        return await request.get(`${BASE_URL}/Products/${id}`);
+export const getOne = async (id) => {  
+       return request.get(`${BASE_URL}/Products/${id}`);
 }
 export const getNewest = async()=>{
         return await request.get(`${BASE_URL}/Products/NewArrivals`);
