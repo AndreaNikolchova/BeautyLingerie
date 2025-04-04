@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function useCart() {
     const navigate = useNavigate();
@@ -20,15 +22,38 @@ export default function useCart() {
     const addToCart = (product, quantity = 1) => {
         setCartItems(prevItems => {
             const existingItem = prevItems.find(item => item.id === product.id);
+            const availableQuantity = product.quantityAll || Infinity;
             
+            
+            const currentQty = existingItem ? existingItem.quantity : 0;
+            const newQty = Math.min(currentQty + quantity, availableQuantity);
+            const reachedMax = newQty >= availableQuantity;
+    
+            setTimeout(() => {
+                if (reachedMax) {
+                  toast.warning(`Added all ${availableQuantity} (max available)`, {
+                    position: "top-right",
+                    autoClose: 2000,
+                    icon: '⚠️' 
+                  });
+                } else {
+                  toast.success("Added to cart", {
+                    position: "top-right",
+                    autoClose: 2000,
+                    icon: '✅'
+                  });
+                }
+              }, 0);
+          
+
             if (existingItem) {
                 return prevItems.map(item =>
                     item.id === product.id
                         ? { 
                             ...item, 
-                            quantity: Math.min(item.quantity + quantity, product.quantityAll || Infinity),
+                            quantity: newQty,
                             price: Number(product.price) || 0
-                        }
+                          }
                         : item
                 );
             }
@@ -37,13 +62,12 @@ export default function useCart() {
                 ...prevItems, 
                 { 
                     ...product, 
-                    quantity: Math.min(quantity, product.quantityAll || Infinity),
+                    quantity: newQty,
                     price: Number(product.price) || 0
                 }
             ];
         });
     };
-
     const removeFromCart = (productId) => {
         setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
     };

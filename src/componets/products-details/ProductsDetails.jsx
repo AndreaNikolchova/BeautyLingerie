@@ -2,10 +2,11 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetOneProduct } from '../../hooks/useProducts'
 import useCart from '../../hooks/useCart.js';
-
+import { ToastContainer } from 'react-toastify';
 import { useState } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel} from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+
 export default function ProductDetails() {
   const { addToCart } = useCart();
   const { productId } = useParams();
@@ -75,6 +76,7 @@ export default function ProductDetails() {
           </DialogPanel>
         </div>
       </div>
+                  <ToastContainer />
     </Dialog>
   )
 }

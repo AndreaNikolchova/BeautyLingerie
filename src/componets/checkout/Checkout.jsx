@@ -1,4 +1,4 @@
-import  ConfirmedOrder   from '../checkout/confirmed-order/ConfirmedOrder.jsx';
+import ConfirmedOrder from '../checkout/confirmed-order/ConfirmedOrder.jsx';
 import LoadingOrder from '../checkout/loading-order/LoadingOrder.jsx';
 import useCheckout from '../../hooks/useChekout.js';
 
