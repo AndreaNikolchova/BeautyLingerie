@@ -19,6 +19,9 @@ const categories = [
   ]
   
   export default function Home() {
+    if (!categories || Object.keys(categories).length === 0) {
+        return <Loading/>;
+      }
     return (
       <div className="bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

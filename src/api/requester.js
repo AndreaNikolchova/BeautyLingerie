@@ -10,6 +10,7 @@ export default async function requester(method, url, data) {
         options.body = JSON.stringify(data);
     }
     const responce = await fetch(url, options);
+
     let result = {};
     if (!responce.ok) {
         if(responce.status === 401){

@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useState } from 'react';
 import {
     Dialog,
     DialogPanel,
@@ -9,35 +9,31 @@ import {
     PopoverButton,
     PopoverGroup,
     PopoverPanel,
-} from '@headlessui/react'
+} from '@headlessui/react';
 import {
     Bars3Icon,
     XMarkIcon,
-    ShoppingBagIcon
-
-} from '@heroicons/react/24/outline'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
-import { Link } from 'react-router-dom'
-import { AuthContext } from '../../context/AuthContext'
+    ShoppingBagIcon,
+} from '@heroicons/react/24/outline';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import { Link } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 
 const productCategories = [
     { name: 'Bikini', href: '/bikini' },
     { name: 'Underwear', href: '/underwear' },
     { name: 'Others', href: '/others' },
     { name: 'All', href: '' },
-
-]
-
+];
 
 export default function Header() {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-    const {isAuthenticated} = useContext(AuthContext);
-
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const { isAuthenticated } = useContext(AuthContext);
     return (
         <header className="bg-beige">
             <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
                 <div className="flex lg:flex-1">
-                    <Link to='/' className="-m-1.5 p-1.5">
+                    <Link to="/" className="-m-1.5 p-1.5">
                         <span className="sr-only">Beauty Lingerie</span>
                         <img alt="" src="/Logo.png" className="h-20 w-auto" />
                     </Link>
@@ -78,7 +74,6 @@ export default function Header() {
                                     </div>
                                 ))}
                             </div>
-
                         </PopoverPanel>
                     </Popover>
 
@@ -90,17 +85,24 @@ export default function Header() {
                     </Link>
                 </PopoverGroup>
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end space-x-4">
-                    <Link to={'/register'} className="text-sm font-semibold leading-6 text-gray-900 ">
-                        Register
+
+                    {!isAuthenticated ? (
+                        <>
+                            <Link to={'/register'} className="text-sm font-semibold leading-6 text-gray-900 ">
+                                Register
+                            </Link>
+                            <Link to={'/login'} className="text-sm font-semibold leading-6 text-gray-900 ">
+                                Log In
+                            </Link>
+                        </>
+                    ) : (
+                        <Link to={'/logout'} className="text-sm font-semibold leading-6 text-gray-900 ">
+                            Log Out
+                        </Link>
+                    )}
+                    <Link to="/cart">
+                        <ShoppingBagIcon aria-hidden="true" className="h-6 w-6" />
                     </Link>
-                    <Link to={'/login'} className="text-sm font-semibold leading-6 text-gray-900 ">
-                        Log In
-                    </Link>
-                    <Link to='/cart'>
-                    <ShoppingBagIcon aria-hidden="true" className="h-6 w-6" />
-                    </Link>
-                    
-                    
                 </div>
             </nav>
 
@@ -108,13 +110,9 @@ export default function Header() {
                 <div className="fixed inset-0 z-10" />
                 <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-beige px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
                     <div className="flex items-center justify-between">
-                        <a href="#" className="-m-1.5 p-1.5">
+                        <a href="/" className="-m-1.5 p-1.5">
                             <span className="sr-only">Beauty Lingerie</span>
-                            <img
-                                alt=""
-                                src="/Logo.png"
-                                className="h-10 w-auto"
-                            />
+                            <img alt="" src="/Logo.png" className="h-10 w-auto" />
                         </a>
                         <button
                             type="button"
@@ -135,55 +133,72 @@ export default function Header() {
                                     </DisclosureButton>
                                     <DisclosurePanel className="mt-2 space-y-2">
                                         {[...productCategories].map((item) => (
-                                            <DisclosureButton
+                                            <Link
                                                 key={item.name}
-                                                 as={Link}
-                                                to={`/products/${item.href}`}
+                                                to={`/products${item.href}`}
+                                                onClick={() => setMobileMenuOpen(false)}
                                                 className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-beige-50"
                                             >
                                                 {item.name}
-                                            </DisclosureButton>
+                                            </Link>
                                         ))}
                                     </DisclosurePanel>
                                 </Disclosure>
                                 <Link
-                                    to={'/product/new-arrivals'}
+                                    to={'/products/new-arrivals'}
+                                    onClick={() => setMobileMenuOpen(false)}
                                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-beige-50"
                                 >
                                     New Arrivals
                                 </Link>
                                 <Link
                                     to="/about"
+                                    onClick={() => setMobileMenuOpen(false)}
                                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-beige-50"
                                 >
                                     About
                                 </Link>
                             </div>
                             <div className="py-6">
+
+                                {!isAuthenticated ? (
+                                    <>
+                                        <Link
+                                            to="/register"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-beige-50"
+                                        >
+                                            Register
+                                        </Link>
+                                        <Link
+                                            to="/login"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-beige-50"
+                                        >
+                                            Log In
+                                        </Link>
+                                    </>
+                                ) : (
+                                    <Link
+                                        to="/logout"
+                                        onClick={() => setMobileMenuOpen(false)}
+                                        className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-beige-50"
+                                    >
+                                        Log Out
+                                    </Link>
+                                )}
                                 <Link
-                                    to="/register"
-                                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-beige-50"
-                                >
-                                    Register
-                                </Link>
-                                <Link
-                                    to="/login"
-                                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-beige-50"
-                                >
-                                    Log In
-                                </Link>
-                                <Link
-                                    href="/cart"
+                                    to="/cart"
+                                    onClick={() => setMobileMenuOpen(false)}
                                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-beige-50"
                                 >
                                     <ShoppingBagIcon aria-hidden="true" className="h-6 w-6" />
                                 </Link>
-
                             </div>
                         </div>
                     </div>
                 </DialogPanel>
             </Dialog>
         </header>
-    )
+    );
 }
