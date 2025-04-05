@@ -22,14 +22,10 @@ export default function useCart() {
     const addToCart = (product, quantity = 1) => {
         setCartItems(prevItems => {
             const existingItem = prevItems.find(item => item.id === product.id);
-            const availableQuantity = product.quantityAll || Infinity;
-            
+            const availableQuantity = product.maxQuantity || Infinity;
             
             const currentQty = existingItem ? existingItem.quantity : 0;
             const newQty = Math.min(currentQty + quantity, availableQuantity);
- 
-    
-   
 
             if (existingItem) {
                 return prevItems.map(item =>
@@ -100,11 +96,12 @@ export default function useCart() {
     const handleCheckout = (cartProducts) => {
         const orderData = {
             products: cartProducts.map(item => ({
-                id: item.id,
+                productId: item.id,
                 name: item.name,
                 price: item.price,
                 quantity: item.quantity,
-                imageUrl: item.imageUrl
+                imageUrl: item.imageUrl,
+                selectedSize: item.selectedSize
             })),
             subtotal: calculateSubtotal(),
             shipping: calculateShipping(),
