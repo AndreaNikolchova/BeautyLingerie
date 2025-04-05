@@ -9,16 +9,19 @@ export default async function requester(method, url, data) {
         };
         options.body = JSON.stringify(data);
     }
-
     const responce = await fetch(url, options);
     let result = {};
     if (!responce.ok) {
-        if (responce.status !== 401) {
-            result = await responce.json();
-            throw result;
+        if(responce.status === 401){
+            throw new Error("Email or password is incorrect!");
         }
+        const error = await responce.json(); 
+        return error;
     }
     if (method !== 'POST') {
+        return result = await responce.json();
+    }
+    if (url.includes("Login")) {
         return result = await responce.json();
     }
 

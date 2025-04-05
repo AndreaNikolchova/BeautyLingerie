@@ -10,15 +10,14 @@ export default function Login() {
     const navigate = useNavigate();
     const login = useLogin();
     const loginHandler = async ({ email, password }) => {
-        try {
-            await login(email, password);
-            navigate('/');
+    
+        try{
+             await login(email, password);
+            navigate("/")
         }
-        catch (responce) {
-            if(responce.status === 401){
-                setError('Password or email is not correct')
-            }
-
+        catch(error)
+        {
+            setError(error.message);
         }
     }
     const { values, changeHandler, submitHandler } = useForm(initialValues, loginHandler);
@@ -73,9 +72,9 @@ export default function Login() {
                             </div>
                         </div>
                         <div className="text-sm">
-                                    <p className="font-semibold text-purple-600 hover:text-purple-500">
-                                       {error}
-                                    </p>
+                            <p className="font-semibold text-purple-600 hover:text-purple-500">
+                                {error}
+                            </p>
                         </div>
 
                         <div>
