@@ -1,5 +1,5 @@
 import ConfirmedOrder from '../checkout/confirmed-order/ConfirmedOrder.jsx';
-import LoadingOrder from '../checkout/loading-order/LoadingOrder.jsx';
+import Loading from '../loading/Loading.jsx';
 import useCheckout from '../../hooks/useChekout.js';
 
 export default function Checkout() {
@@ -12,7 +12,7 @@ export default function Checkout() {
     handleSubmit,
   } = useCheckout();
 
-  if (!order && !orderSuccess) return <LoadingOrder />;
+  if (!order && !orderSuccess) return <Loading />;
 
   if (orderSuccess) return <ConfirmedOrder />;
 
@@ -43,7 +43,13 @@ export default function Checkout() {
                     <div className="ml-4 flex-1 flex flex-col">
                       <div>
                         <div className="flex justify-between text-base font-medium text-gray-900">
-                          <h3>{item.name}</h3>
+                          <div>
+                            <h3>{item.name}</h3>
+                        
+                            {item.selectedSize && (
+                              <p className="text-sm text-gray-500">Size: {item.selectedSize}</p>
+                            )}
+                          </div>
                           <p className="ml-4">${(item.price * item.quantity).toFixed(2)}</p>
                         </div>
                         <p className="mt-1 text-sm text-gray-500">${item.price.toFixed(2)} × {item.quantity}</p>
