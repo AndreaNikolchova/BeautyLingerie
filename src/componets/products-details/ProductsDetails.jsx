@@ -2,11 +2,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useGetOneProduct } from '../../hooks/useProducts';
 import useCart from '../../hooks/useCart';
 import { ToastContainer, toast } from 'react-toastify';
-import { useState, useEffect } from 'react'; // Add useEffect import
+import { useState, useEffect, useContext } from 'react';
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from '../loading/Loading';
+import { AuthContext } from '../../context/AuthContext';
 
 export default function ProductDetails() {
   const { productId } = useParams();
@@ -16,7 +17,7 @@ export default function ProductDetails() {
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
-
+  const { isAuthenticated } = useContext(AuthContext);
   useEffect(() => {
     if (product?.sizes?.length > 0) {
       setSelectedSize(product.sizes[0].sizeName);
@@ -50,9 +51,9 @@ export default function ProductDetails() {
   };
 
   if (!product || Object.keys(product).length === 0) {
-    return <Loading/>;
+    return <Loading />;
   }
- 
+
   return (
     <Dialog open={open} onClose={goBack} className="relative z-10">
       <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
@@ -92,6 +93,9 @@ export default function ProductDetails() {
                       <p className="mt-2 text-sm text-gray-700">
                         {product.description}
                       </p>
+                      <div className="mt-4">
+
+                      </div>
                       <p className="mt-2 text-sm text-gray-700">
                         Color: {product.colorName}
                       </p>
@@ -105,8 +109,8 @@ export default function ProductDetails() {
                               type="button"
                               onClick={() => handleSizeChange(size.sizeName)}
                               className={`inline-flex items-center rounded-md px-3 py-2 text-sm font-medium shadow-sm ${selectedSize === size.sizeName
-                                  ? 'bg-purple-600 text-white'
-                                  : 'bg-white text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
+                                ? 'bg-purple-600 text-white'
+                                : 'bg-white text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
                                 }`}
                             >
                               {size.sizeName}
@@ -138,15 +142,28 @@ export default function ProductDetails() {
                           </p>
                         </div>
                       )}
+                      <button
+                        onClick={() => {
 
+                          if (isAuthenticated) {
+                            navigate(`/products/${productId}/review`);
+                          } else {
+                            toast.info('Please log in to leave a review');
+                            navigate('/login', { state: { from: `/products/${productId}` } });
+                          }
+                        }}
+                        className="text-sm font-medium text-purple-600 hover:text-purple-500"
+                      >
+                        Add a Review
+                      </button>
                       <div className="mt-6">
                         <button
                           type="button"
                           onClick={handleAddToCart}
                           disabled={!selectedSize}
                           className={`inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm ${selectedSize
-                              ? 'bg-purple-600 hover:bg-purple-500'
-                              : 'bg-gray-400 cursor-not-allowed'
+                            ? 'bg-purple-600 hover:bg-purple-500'
+                            : 'bg-gray-400 cursor-not-allowed'
                             } focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600`}
                         >
                           Add to cart
