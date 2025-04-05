@@ -1,7 +1,7 @@
-import { useState,  } from 'react';
-import { Routes, Route,  } from 'react-router-dom';
+import { useState } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
-import { AuthContext } from './context/AuthContext.js';
+import { AuthContext } from '../src/context/AuthContext.js';
 import Header from './componets/header/Header';
 import Home from './componets/home/Home';
 import ProductDetails from './componets/products-details/ProductsDetails';
@@ -12,8 +12,7 @@ import Register from './componets/register/Register';
 import ProductsByCategory from './componets/product-list/products-by-category/ProductsByCategory';
 import ProductsAll from './componets/product-list/products-all/ProductsAll';
 import NewestArrivals from './componets/product-list/newest-products/NewestArrivals';
-import LogoutItem from './componets/logout-item/LogoutItem';
-
+import LogoutItem from './componets/logout-item/LogoutItem.jsx';
 
 function App() {
   const savedAuthState = JSON.parse(sessionStorage.getItem('authState')) || {};
@@ -28,10 +27,9 @@ function App() {
     email: authState.email,
     accessToken: authState.accessToken,
     isAuthenticated: !!authState.email,
+    isAdmin: authState.isAdmin,
     changeAuthState,
-
   };
-
   return (
     <AuthContext.Provider value={contextData}>
       <Header />
@@ -46,15 +44,19 @@ function App() {
         <Route path='/cart' element={<Cart />} />
         <Route path='/checkout' element={<Checkout />} />
 
-      
+       
         {!contextData.isAuthenticated ? (
           <>
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
           </>
         ) : (
-          <Route path='/logout' element={<LogoutItem />} />
+        
+          <Route path='/login' element={<Navigate to="/" />} />
         )}
+
+       
+        {contextData.isAuthenticated && <Route path='/logout' element={<LogoutItem />} />}
       </Routes>
     </AuthContext.Provider>
   );
