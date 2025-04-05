@@ -2,19 +2,26 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useGetOneProduct } from '../../hooks/useProducts';
 import useCart from '../../hooks/useCart';
 import { ToastContainer, toast } from 'react-toastify';
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'; // Add useEffect import
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import 'react-toastify/dist/ReactToastify.css';
+import Loading from '../loading/Loading';
 
 export default function ProductDetails() {
   const { productId } = useParams();
-  const [ product ] = useGetOneProduct(productId);
+  const [product] = useGetOneProduct(productId);
   const { addToCart } = useCart();
   const [open, setOpen] = useState(true);
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (product?.sizes?.length > 0) {
+      setSelectedSize(product.sizes[0].sizeName);
+    }
+  }, [product]);
 
   const goBack = () => {
     setOpen(false);
@@ -22,21 +29,8 @@ export default function ProductDetails() {
   };
 
   const handleAddToCart = () => {
-    if (!selectedSize) {
-      toast.error('Please select a size');
-      return;
-    }
 
     const sizeInfo = product.sizes.find(s => s.sizeName === selectedSize);
-    if (!sizeInfo) {
-      toast.error('Invalid size selection');
-      return;
-    }
-
-    if (quantity < 1 || quantity > sizeInfo.quantity) {
-      toast.error(`Please enter a valid quantity (1-${sizeInfo.quantity})`);
-      return;
-    }
 
     addToCart({
       ...product,
@@ -56,9 +50,9 @@ export default function ProductDetails() {
   };
 
   if (!product || Object.keys(product).length === 0) {
-    return <p>Loading...</p>;
+    return <Loading/>;
   }
-
+ 
   return (
     <Dialog open={open} onClose={goBack} className="relative z-10">
       <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
@@ -110,11 +104,10 @@ export default function ProductDetails() {
                               key={size.sizeName}
                               type="button"
                               onClick={() => handleSizeChange(size.sizeName)}
-                              className={`inline-flex items-center rounded-md px-3 py-2 text-sm font-medium shadow-sm ${
-                                selectedSize === size.sizeName
+                              className={`inline-flex items-center rounded-md px-3 py-2 text-sm font-medium shadow-sm ${selectedSize === size.sizeName
                                   ? 'bg-purple-600 text-white'
                                   : 'bg-white text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
-                              }`}
+                                }`}
                             >
                               {size.sizeName}
                             </button>
@@ -151,11 +144,10 @@ export default function ProductDetails() {
                           type="button"
                           onClick={handleAddToCart}
                           disabled={!selectedSize}
-                          className={`inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm ${
-                            selectedSize
+                          className={`inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm ${selectedSize
                               ? 'bg-purple-600 hover:bg-purple-500'
                               : 'bg-gray-400 cursor-not-allowed'
-                          } focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600`}
+                            } focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600`}
                         >
                           Add to cart
                         </button>
