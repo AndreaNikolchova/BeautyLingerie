@@ -13,14 +13,11 @@ export default function CartItem(props) {
         cartItems
     } = useCart();
 
-
     const [displayItems, setDisplayItems] = useState(props.items || cartItems);
-
 
     useEffect(() => {
         setDisplayItems(cartItems);
     }, [cartItems]);
-
 
     if (!displayItems || displayItems.length === 0) {
         return (
@@ -40,7 +37,8 @@ export default function CartItem(props) {
         <div className="lg:grid lg:grid-cols-12 lg:gap-x-8">
             <div className="lg:col-span-8">
                 <div className="hidden lg:grid lg:grid-cols-12 lg:gap-x-8 lg:border-b lg:border-gray-200 lg:pb-4 lg:mb-4">
-                    <div className="lg:col-span-6 text-sm font-medium text-gray-500">Product</div>
+                    <div className="lg:col-span-5 text-sm font-medium text-gray-500">Product</div>
+                    <div className="lg:col-span-1 text-sm font-medium text-gray-500">Size</div>
                     <div className="lg:col-span-2 text-sm font-medium text-gray-500">Price</div>
                     <div className="lg:col-span-2 text-sm font-medium text-gray-500">Quantity</div>
                     <div className="lg:col-span-2 text-sm font-medium text-gray-500">Total</div>
@@ -48,7 +46,7 @@ export default function CartItem(props) {
 
                 {displayItems.map((item) => (
                     <div key={item.id} className="grid grid-cols-1 gap-y-4 lg:grid-cols-12 lg:gap-x-8 lg:border-b lg:border-gray-200 lg:pb-8 lg:mb-8">
-                        <div className="lg:col-span-6">
+                        <div className="lg:col-span-5">
                             <div className="flex items-center gap-4">
                                 <img
                                     src={item.imageUrl || 'https://via.placeholder.com/80'}
@@ -67,14 +65,19 @@ export default function CartItem(props) {
                             </div>
                         </div>
 
+                     
+                        <div className="lg:col-span-1 flex items-center">
+                            <p className="text-sm text-gray-900">{item.selectedSize || 'N/A'}</p>
+                        </div>
+
                         <div className="lg:col-span-2 flex items-center">
-                            <p className="text-sm text-gray-900">{item.price?.toFixed(2)} lv</p>
+                            <p className="text-sm text-gray-900">{item.price?.toFixed(2)}lv</p>
                         </div>
 
                         <div className="lg:col-span-2 flex flex-col items-center justify-center mt-5">
                             <div className="flex items-center gap-2">
                                 <button
-                                    onClick={() => updateQuantity(item.id, item.quantity - 1, item.quantityAll)}
+                                    onClick={() => updateQuantity(item.id, item.quantity - 1, item.maxQuantity)}
                                     className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-100 focus:outline-none"
                                     disabled={item.quantity <= 1}
                                 >
@@ -84,29 +87,26 @@ export default function CartItem(props) {
                                 <span className="w-8 text-center">{item.quantity}</span>
 
                                 <button
-                                    onClick={() => updateQuantity(item.id, item.quantity + 1, item.quantityAll)}
+                                    onClick={() => updateQuantity(item.id, item.quantity + 1, item.maxQuantity)}
                                     className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-100 focus:outline-none"
-                                    disabled={item.quantity >= item.quantityAll}
+                                    disabled={item.quantity >= item.maxQuantity}
                                 >
                                     +
                                 </button>
                             </div>
 
-                          
                             <div className="h-4 mt-1">
-                                {item.quantity >= item.quantityAll && (
+                                {item.quantity >= item.maxQuantity && (
                                     <span className="text-red-500 text-xs italic">Max quantity reached</span>
                                 )}
                             </div>
                         </div>
-
 
                         <div className="lg:col-span-2 flex items-center">
                             <p className="text-sm font-medium text-gray-900">
                                 {((item.price || 0) * item.quantity).toFixed(2)} lv
                             </p>
                         </div>
-
                     </div>
                 ))}
             </div>
