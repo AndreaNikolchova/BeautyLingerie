@@ -14,6 +14,7 @@ import ProductsAll from './componets/product-list/products-all/ProductsAll';
 import NewestArrivals from './componets/product-list/newest-products/NewestArrivals';
 import LogoutItem from './componets/logout-item/LogoutItem.jsx';
 import AddReview from './componets/review/add/AddReview.jsx';
+import ProductReviewsPage from './componets/review/product-reviews/ProductReviews.jsx';
 
 function App() {
   const savedAuthState = JSON.parse(sessionStorage.getItem('authState')) || {};
@@ -45,6 +46,7 @@ function App() {
         <Route path='/cart' element={<Cart />} />
         <Route path='/checkout' element={<Checkout />} />
         <Route path='/products/:productId/review' element={<AddReview/>}/>
+        <Route path='/reviews/:productId' element={<ProductReviewsPage/>}/>
        
         {!contextData.isAuthenticated ? (
           <>
