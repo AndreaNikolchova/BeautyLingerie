@@ -1,7 +1,9 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetOneProduct } from '../../hooks/useProducts';
 import useCart from '../../hooks/useCart';
+import { Link } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
+import { StarIcon } from '@heroicons/react/20/solid'
 import { useState, useEffect, useContext } from 'react';
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
@@ -99,7 +101,23 @@ export default function ProductDetails() {
                       <p className="mt-2 text-sm text-gray-700">
                         Color: {product.colorName}
                       </p>
-
+                      <div className="mt-6">
+                        <div className="flex items-center">
+                          <div className="flex items-center">
+                            {[0, 1, 2, 3, 4].map((rating) => (
+                              <StarIcon
+                                key={rating}
+                                aria-hidden="true"
+                                className={`size-5 shrink-0 ${product.reviewAverage > rating ? 'text-gray-900' : 'text-gray-200'}`}
+                              />
+                            ))}
+                          </div>
+                          <p className="sr-only">{product.reviewAverage} out of 5 stars</p>
+                          <Link to={`/reviews/${productId}`} key={productId} className="ml-3 text-sm font-medium text-purple-600 hover:text-purple-500">
+                            {product.reviewCount} reviews
+                          </Link>
+                        </div>
+                      </div>
                       <div className="mt-4">
                         <h4 className="text-sm font-medium text-gray-900">Size</h4>
                         <div className="mt-2 flex flex-wrap gap-2">
@@ -181,3 +199,4 @@ export default function ProductDetails() {
     </Dialog>
   );
 }
+

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import {addReview} from '../../../api/review-api';
 
 
 export default function AddReview() {
@@ -12,8 +13,16 @@ export default function AddReview() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const addRating={
+          productId:productId,
+          rating:rating,
+          comment: comment,
+          email: JSON.parse(sessionStorage.getItem('authState')).email
+  
+        }
 
         try {
+          addReview(addRating)
             toast.success('Review submitted successfully!');
             navigate(`/products/${productId}/details`);
         } catch (error) {
