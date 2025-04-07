@@ -15,6 +15,7 @@ import NewestArrivals from './componets/product-list/newest-products/NewestArriv
 import LogoutItem from './componets/logout-item/LogoutItem.jsx';
 import AddReview from './componets/review/add/AddReview.jsx';
 import ProductReviewsPage from './componets/review/product-reviews/ProductReviews.jsx';
+import EditReview from './componets/review/edit/EditReview.jsx';
 
 function App() {
   const savedAuthState = JSON.parse(sessionStorage.getItem('authState')) || {};
@@ -47,7 +48,7 @@ function App() {
         <Route path='/checkout' element={<Checkout />} />
         <Route path='/products/:productId/review' element={<AddReview/>}/>
         <Route path='/reviews/:productId' element={<ProductReviewsPage/>}/>
-       
+        <Route path='/reviews/edit/:reviewId' element={<EditReview/>}/>
         {!contextData.isAuthenticated ? (
           <>
             <Route path='/login' element={<Login />} />

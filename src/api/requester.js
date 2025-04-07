@@ -8,7 +8,9 @@ export default async function requester(method, url, data) {
             'Content-Type': 'application/json',
         };
         options.body = JSON.stringify(data);
+
     }
+
     const responce = await fetch(url, options);
 
     let result = {};
@@ -19,7 +21,7 @@ export default async function requester(method, url, data) {
         const error = await responce.json(); 
         return error;
     }
-    if (method !== 'POST') {
+    if (method === 'GET') {
         return result = await responce.json();
     }
     if (url.includes("Login")) {
