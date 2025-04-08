@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast,ToastContainer } from 'react-toastify';
 import {addReview} from '../../../api/review-api';
 
 
@@ -22,11 +22,11 @@ export default function AddReview() {
         }
 
         try {
-          addReview(addRating)
+          await addReview(addRating)
             toast.success('Review submitted successfully!');
-            navigate(`/products/${productId}/details`);
+            navigate(`/reviews/${productId}`);
         } catch (error) {
-            toast.error('Failed to submit review');
+            toast.warning('You can add only one review. If you want to add something edit your review');
         }
     };
 
@@ -94,6 +94,7 @@ export default function AddReview() {
             </button>
           </div>
         </form>
+        <ToastContainer position="top-right" autoClose={2000} />
       </div>
     );
 }
