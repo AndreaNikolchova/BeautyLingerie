@@ -1,13 +1,21 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom";
-
-import { getAllReviewsProduct, deleteReview ,getReview } from "../api/review-api";
+import { getAllReviewsProduct ,getReview,getAllReviewsUser } from "../api/review-api";
 
 export function usegetAllReviewsProduct(productId) {
 
     const [reviews, setReviews] = useState([]);
     useEffect(() => {
         getAllReviewsProduct(productId)
+            .then(result => setReviews(result));
+    }, []);
+
+    return [reviews, setReviews]
+}
+export function usegetAllReviewsUser(email) {
+
+    const [reviews, setReviews] = useState([]);
+    useEffect(() => {
+        getAllReviewsUser(email)
             .then(result => setReviews(result));
     }, []);
 
@@ -22,10 +30,4 @@ export function useReviewById(reviewId) {
     }, []);
 
     return [review, setReview]
-}
-export function deleteReviewHook(reviewId,productId) {
-    const navigate = useNavigate()
-    deleteReview(reviewId);
-    navigate(`reviews/${productId}`);
-
 }
