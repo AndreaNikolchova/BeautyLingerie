@@ -1,15 +1,20 @@
 import { StarIcon, PencilIcon, TrashIcon } from '@heroicons/react/20/solid';
-import { usegetAllReviewsProduct,deleteReviewHook } from '../../../hooks/useReview'
-import NoReviews from '../no-reviews/NoReviews';
+import { usegetAllReviewsProduct } from '../../../hooks/useReview'
+import NoReviewsProduct from '../no-reviews/NoReviewsProduct';
+import { toast,ToastContainer } from 'react-toastify';
+import { deleteReview } from '../../../api/review-api';
 import { useParams, Link } from 'react-router-dom';
+import Loading from '../../loading/Loading';
+
+
 export default function ProductReviewsPage() {
   const { productId } = useParams();
-  const [reviews] = usegetAllReviewsProduct(productId)
+  const [reviews,setReviews] = usegetAllReviewsProduct(productId)
 
+  if(!reviews) return <Loading/>
   const currentUser = JSON.parse(sessionStorage.getItem('authState'));
-
   if (reviews.length == 0) {
-    return <NoReviews />
+    return <NoReviewsProduct />
   }
   const averageRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
   const roundedAverage = Math.round(averageRating * 10) / 10;
@@ -56,7 +61,24 @@ export default function ProductReviewsPage() {
 
     return stars;
   };
-
+  const handleDelete = async (reviewId) => {
+    try {
+      // Confirm deletion first
+      const confirmDelete = window.confirm('Are you sure you want to delete this review?');
+      if (!confirmDelete) return;
+  
+      // Make the API call
+      await deleteReview(reviewId);
+      
+      // Update the state by filtering out the deleted review
+      setReviews(prevReviews => prevReviews.filter(review => review.id !== reviewId));
+      
+      toast.success('Review deleted successfully!');
+    } catch (error) {
+      console.error('Delete error:', error);
+      toast.error(error.response?.data?.message || 'Failed to delete review');
+    }
+  };
   return (
     <div className="product-reviews-page max-w-4xl mx-auto p-5">
       <h1 className="text-2xl font-bold mb-8">Product Reviews</h1>
@@ -114,7 +136,7 @@ export default function ProductReviewsPage() {
                   <PencilIcon className="h-4 w-4" />
                 </Link>
                 <button
-                  onClick={() => deleteReviewHook(review.id)}
+                  onClick={() => handleDelete(review.id)}
                   className="text-red-500 hover:text-red-700 p-1 rounded"
                   title="Delete review"
                 >
@@ -125,6 +147,7 @@ export default function ProductReviewsPage() {
           </div>
         ))}
       </div>
+      <ToastContainer position="top-right" autoClose={2000} />
     </div>
   );
 };
