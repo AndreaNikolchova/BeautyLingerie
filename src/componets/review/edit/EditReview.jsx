@@ -3,17 +3,16 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { editReview } from '../../../api/review-api';
 import { useReviewById } from '../../../hooks/useReview';
+import NotFound from '../not-found/NotFound';
 
 export default function EditReview() {
     const { reviewId } = useParams();
     const [review] = useReviewById(reviewId);
-
     const navigate = useNavigate();
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
     const [hover, setHover] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
-
 
     useEffect(() => {
         if (review) {
@@ -27,7 +26,7 @@ export default function EditReview() {
         setIsSubmitting(true);
 
         try {
-            editReview({ id: reviewId, rating, comment });
+            await editReview({ id: reviewId, rating, comment });
             toast.success('Review edited successfully!');
             navigate(`/reviews/${review.productId}`);
         } catch (error) {
@@ -37,7 +36,7 @@ export default function EditReview() {
         }
     };
 
-    if (!review) return <div>Review not found</div>;
+    if (!review || Object.keys(review).length === 0) return <NotFound/>;
 
     return (
         <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:px-8">
