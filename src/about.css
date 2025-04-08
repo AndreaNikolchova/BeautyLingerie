@@ -1,0 +1,199 @@
+.about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Playfair Display', 'Georgia', serif;
+    color: #333;
+  }
+  
+  .about-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2rem 0;
+    background: linear-gradient(to right, #f8e1e4, #fff5f6);
+    border-radius: 8px;
+  }
+  
+  .about-header h1 {
+    font-size: 2.8rem;
+    color: #8b5a7e;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+  
+  .about-header p {
+    font-size: 1.2rem;
+    color: #7a6b79;
+    max-width: 800px;
+    margin: 0 auto;
+    font-style: italic;
+  }
+  
+  .about-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+  
+  .about-story, .about-mission {
+    flex: 1;
+    min-width: 300px;
+    padding: 2rem;
+    background-color: #fff9fb;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(139, 90, 126, 0.1);
+    border-top: 4px solid #d8a1c4;
+  }
+  
+  .about-story h2, .about-mission h2 {
+    color: #a86b94;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 500;
+  }
+  
+  .about-story p, .about-mission p {
+    color: #5a4a58;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+  
+  .team-section {
+    margin-top: 4rem;
+    padding: 2rem 0;
+  }
+  
+  .team-section h2 {
+    text-align: center;
+    font-size: 2.2rem;
+    color: #8b5a7e;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+  
+  .team-section h2:after {
+    content: "";
+    display: block;
+    width: 100px;
+    height: 2px;
+    background: #d8a1c4;
+    margin: 1rem auto;
+  }
+  
+  .team-members {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3rem;
+  }
+  
+  .team-member {
+    width: 220px;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .team-member img {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1.5rem;
+    border: 4px solid #f0d5e6;
+    box-shadow: 0 4px 15px rgba(168, 107, 148, 0.2);
+  }
+  
+  .team-member h3 {
+    color: #7a4a6b;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  
+  .team-member p {
+    color: #9b8a99;
+    font-style: italic;
+    font-size: 0.95rem;
+  }
+  
+  .values-section {
+    margin-top: 4rem;
+    background: linear-gradient(135deg, #8b5a7e, #b37ba6);
+    padding: 4rem 3rem;
+    border-radius: 8px;
+    color: white;
+  }
+  
+  .values-section h2 {
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 3rem;
+    font-weight: 500;
+  }
+  
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2.5rem;
+  }
+  
+  .value-card {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    backdrop-filter: blur(5px);
+    transition: transform 0.3s ease;
+  }
+  
+  .value-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .value-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.2rem;
+    font-weight: 500;
+  }
+  
+  .value-card p {
+    line-height: 1.7;
+    font-size: 0.95rem;
+  }
+  
+  .location-section {
+    margin-top: 4rem;
+    padding: 3rem;
+    text-align: center;
+    background-color: #fff9fb;
+    border-radius: 8px;
+    border: 1px solid #f0d5e6;
+  }
+  
+  .location-section h2 {
+    color: #8b5a7e;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .location-section p {
+    color: #7a6b79;
+    line-height: 1.8;
+    max-width: 700px;
+    margin: 0 auto 1rem;
+  }
+  
+  @media (max-width: 768px) {
+    .about-content {
+      flex-direction: column;
+    }
+    
+    .team-member {
+      width: 100%;
+      max-width: 280px;
+    }
+    
+    .about-header h1 {
+      font-size: 2.2rem;
+    }
+  }
