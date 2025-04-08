@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../../../context/AuthContext';
 
-export default function NoReviews() {
+export default function NoReviewsProduct() {
     const { isAuthenticated } = useContext(AuthContext);
      const { productId } = useParams();
     const navigate = useNavigate();
@@ -25,7 +25,7 @@ export default function NoReviews() {
                         navigate('/login', { state: { from: `/products/${productId}` } });
                     }
                 }}
-                className="mt-6 px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors">
+                className="mt-6 px-6 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors">
                 Write a Review
             </button>
         </div>
