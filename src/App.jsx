@@ -16,6 +16,8 @@ import LogoutItem from './componets/logout-item/LogoutItem.jsx';
 import AddReview from './componets/review/add/AddReview.jsx';
 import ProductReviewsPage from './componets/review/product-reviews/ProductReviews.jsx';
 import EditReview from './componets/review/edit/EditReview.jsx';
+import YourReviews from './componets/review/your-reviews/YourReviews.jsx';
+import AboutPage from './componets/about/About.jsx';
 
 function App() {
   const savedAuthState = JSON.parse(sessionStorage.getItem('authState')) || {};
@@ -44,23 +46,26 @@ function App() {
         <Route path='/products/others' element={<ProductsByCategory items='others' />} />
         <Route path='/products/new-arrivals' element={<NewestArrivals items='others' />} />
         <Route path='/products/:productId/details' element={<ProductDetails />} />
+        <Route path='/about' element={<AboutPage />} />
         <Route path='/cart' element={<Cart />} />
         <Route path='/checkout' element={<Checkout />} />
-        <Route path='/products/:productId/review' element={<AddReview/>}/>
-        <Route path='/reviews/:productId' element={<ProductReviewsPage/>}/>
-        <Route path='/reviews/edit/:reviewId' element={<EditReview/>}/>
+        <Route path='/products/:productId/review' element={<AddReview />} />
         {!contextData.isAuthenticated ? (
           <>
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
           </>
         ) : (
-        
-          <Route path='/login' element={<Navigate to="/" />} />
+          <>
+            <Route path='/reviews' element={<YourReviews />} />
+            <Route path='/reviews/:productId' element={<ProductReviewsPage />} />
+            <Route path='/reviews/edit/:reviewId' element={<EditReview />} />
+            <Route path='/logout' element={<LogoutItem />} />
+          </>
         )}
 
-       
-        {contextData.isAuthenticated && <Route path='/logout' element={<LogoutItem />} />}
+
+
       </Routes>
     </AuthContext.Provider>
   );
