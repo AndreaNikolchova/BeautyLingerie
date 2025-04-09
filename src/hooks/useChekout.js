@@ -26,6 +26,9 @@ export default function useCheckout() {
     setIsSubmitting(true);
 
     try {
+      if(customerInfo.email==''){
+        customerInfo.email = JSON.parse(sessionStorage.getItem('authState')).email;
+      }
       await postOrder({
         ...order,
         ...customerInfo,
