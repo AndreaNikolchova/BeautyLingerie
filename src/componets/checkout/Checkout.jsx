@@ -1,8 +1,11 @@
 import ConfirmedOrder from '../checkout/confirmed-order/ConfirmedOrder.jsx';
 import Loading from '../loading/Loading.jsx';
 import useCheckout from '../../hooks/useChekout.js';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext.js';
 
 export default function Checkout() {
+  const { isAuthenticated } = useContext(AuthContext);
   const {
     order,
     customerInfo,
@@ -32,7 +35,7 @@ export default function Checkout() {
             <div className="flow-root">
               <ul className="-my-4 divide-y divide-gray-200">
                 {order.products.map((item) => (
-                  <li key={item.id} className="py-4 flex">
+                  <li className="py-4 flex">
                     <div className="flex-shrink-0">
                       <img
                         className="h-16 w-16 rounded-md object-cover"
@@ -45,7 +48,7 @@ export default function Checkout() {
                         <div className="flex justify-between text-base font-medium text-gray-900">
                           <div>
                             <h3>{item.name}</h3>
-                        
+
                             {item.selectedSize && (
                               <p className="text-sm text-gray-500">Size: {item.selectedSize}</p>
                             )}
@@ -90,7 +93,7 @@ export default function Checkout() {
                   type="text"
                   id="name"
                   value={customerInfo.fullName}
-                  onChange={(e) => setCustomerInfo({...customerInfo, fullName: e.target.value})}
+                  onChange={(e) => setCustomerInfo({ ...customerInfo, fullName: e.target.value })}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   placeholder="John Doe"
                   required
@@ -104,27 +107,29 @@ export default function Checkout() {
                   type="text"
                   id="phoneNumber"
                   value={customerInfo.phoneNumber}
-                  onChange={(e) => setCustomerInfo({...customerInfo, phoneNumber: e.target.value})}
+                  onChange={(e) => setCustomerInfo({ ...customerInfo, phoneNumber: e.target.value })}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   placeholder="0892873649"
                   required
                 />
               </div>
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  value={customerInfo.email}
-                  onChange={(e) => setCustomerInfo({...customerInfo, email: e.target.value})}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  placeholder="you@example.com"
-                  required
-                />
-              </div>
+              {!isAuthenticated && (
+                <div className="mt-4">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={customerInfo.email}
+                    onChange={(e) => setCustomerInfo({ ...customerInfo, email: e.target.value })}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    placeholder="you@example.com"
+                    required
+                  />
+                </div>
+              )}
 
               <div>
                 <label htmlFor="address" className="block text-sm font-medium text-gray-700">
@@ -134,7 +139,7 @@ export default function Checkout() {
                   id="address"
                   rows={4}
                   value={customerInfo.shippingAddress}
-                  onChange={(e) => setCustomerInfo({...customerInfo, shippingAddress: e.target.value})}
+                  onChange={(e) => setCustomerInfo({ ...customerInfo, shippingAddress: e.target.value })}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   placeholder="123 Main St, City, Country"
                   required
