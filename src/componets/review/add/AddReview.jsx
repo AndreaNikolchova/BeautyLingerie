@@ -18,7 +18,6 @@ export default function AddReview() {
           rating:rating,
           comment: comment,
           email: JSON.parse(sessionStorage.getItem('authState')).email
-  
         }
 
         try {
