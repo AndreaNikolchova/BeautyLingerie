@@ -1,4 +1,5 @@
-import {post} from "./requester";
+
+import * as request from "./requester";
 
 const BASE_URL = "https://localhost:7090";
 
@@ -12,6 +13,9 @@ export const postOrder = async(orderObj) => {
     phoneNumber: orderObj.phoneNumber, 
     shippingAddress: orderObj.shippingAddress
 };
- await post(`${BASE_URL}/Order/Add-guest`,formattedData);
+ await request.post(`${BASE_URL}/Order/Add-guest`,formattedData);
 
+}
+export const getOrders = async(email) =>{
+   return await request.get(`${BASE_URL}/Orders/${email}`);
 }
