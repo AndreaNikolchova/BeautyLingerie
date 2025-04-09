@@ -50,6 +50,7 @@ function App() {
         <Route path='/cart' element={<Cart />} />
         <Route path='/checkout' element={<Checkout />} />
         <Route path='/products/:productId/review' element={<AddReview />} />
+        <Route path='/reviews/:productId' element={<ProductReviewsPage />} />
         {!contextData.isAuthenticated ? (
           <>
             <Route path='/login' element={<Login />} />
@@ -58,7 +59,6 @@ function App() {
         ) : (
           <>
             <Route path='/reviews' element={<YourReviews />} />
-            <Route path='/reviews/:productId' element={<ProductReviewsPage />} />
             <Route path='/reviews/edit/:reviewId' element={<EditReview />} />
             <Route path='/logout' element={<LogoutItem />} />
           </>
