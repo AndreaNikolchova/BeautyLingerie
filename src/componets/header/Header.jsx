@@ -84,12 +84,21 @@ export default function Header() {
                         About
                     </Link>
                     {isAuthenticated && (
-                        <Link
-                            to="/reviews"
-                            className="text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-500 transition-colors"
-                        >
-                            My Reviews
-                        </Link>
+                        <>
+                            <Link
+                                to="/reviews"
+                                className="text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-500 transition-colors"
+                            >
+                                My Reviews
+                            </Link>
+                            <Link
+                                to="/orders"
+                                className="text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-500 transition-colors"
+                            >
+                                My Orders
+                            </Link>
+                        </>
+
                     )}
                 </PopoverGroup>
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end space-x-4">
@@ -167,12 +176,21 @@ export default function Header() {
                                     About
                                 </Link>
                                 {isAuthenticated && (
-                                    <Link
-                                        to="/reviews"
-                                        className="text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-500 transition-colors"
-                                    >
-                                        My Reviews
-                                    </Link>
+                                    <>
+                                        <Link
+                                            to="/reviews"
+                                            className="text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-500 transition-colors"
+                                        >
+                                            My Reviews
+                                        </Link>
+                                        <Link
+                                            to="/orders"
+                                            className="text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-500 transition-colors"
+                                        >
+                                            My Orders
+                                        </Link>
+                                    </>
+
                                 )}
                             </div>
                             <div className="py-6">
