@@ -19,3 +19,6 @@ export const postOrder = async(orderObj) => {
 export const getOrders = async(email) =>{
    return await request.get(`${BASE_URL}/Orders/${email}`);
 }
+export const getOrderById = async(orderId) =>{
+  return await request.get(`${BASE_URL}/Order/${orderId}`);
+}

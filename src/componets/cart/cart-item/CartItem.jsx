@@ -45,7 +45,7 @@ export default function CartItem(props) {
                 </div>
 
                 {displayItems.map((item) => (
-                    <div key={item.id} className="grid grid-cols-1 gap-y-4 lg:grid-cols-12 lg:gap-x-8 lg:border-b lg:border-gray-200 lg:pb-8 lg:mb-8">
+                    <div key={item.id+item.selectedSize} className="grid grid-cols-1 gap-y-4 lg:grid-cols-12 lg:gap-x-8 lg:border-b lg:border-gray-200 lg:pb-8 lg:mb-8">
                         <div className="lg:col-span-5">
                             <div className="flex items-center gap-4">
                                 <img

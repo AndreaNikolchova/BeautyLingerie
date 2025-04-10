@@ -21,15 +21,20 @@ export default function useCart() {
 
     const addToCart = (product, quantity = 1) => {
         setCartItems(prevItems => {
-            const existingItem = prevItems.find(item => item.id === product.id);
-            const availableQuantity = product.maxQuantity || Infinity;
+          
+            const existingItem = prevItems.find(item => 
+                item.id === product.id && item.selectedSize === product.selectedSize
+            );
+            
+            const sizeInfo = product.sizes?.find(s => s.sizeName === product.selectedSize);
+            const availableQuantity = sizeInfo?.quantity || Infinity;
             
             const currentQty = existingItem ? existingItem.quantity : 0;
             const newQty = Math.min(currentQty + quantity, availableQuantity);
-
+    
             if (existingItem) {
                 return prevItems.map(item =>
-                    item.id === product.id
+                    item.id === product.id && item.selectedSize === product.selectedSize
                         ? { 
                             ...item, 
                             quantity: newQty,

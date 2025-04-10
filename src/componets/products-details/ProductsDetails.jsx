@@ -39,7 +39,6 @@ export default function ProductDetails() {
       ...product,
       selectedSize,
       price: Number(product.price),
-      maxQuantity: sizeInfo.quantity
     }, quantity);
 
     toast.success(`${product.name} (${selectedSize}) added to cart`);

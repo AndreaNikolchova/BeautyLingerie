@@ -179,12 +179,14 @@ export default function Header() {
                                     <>
                                         <Link
                                             to="/reviews"
+                                            onClick={() => setMobileMenuOpen(false)}
                                             className="text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-500 transition-colors"
                                         >
                                             My Reviews
                                         </Link>
                                         <Link
                                             to="/orders"
+                                            onClick={() => setMobileMenuOpen(false)}
                                             className="text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-500 transition-colors"
                                         >
                                             My Orders

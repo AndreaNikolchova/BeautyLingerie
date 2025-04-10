@@ -1,16 +1,13 @@
-import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-
 import Loading from '../../loading/Loading';
 import OrderStatusBadge from '../order-status/OrderStatusBadge';
-import { formatDate, formatCurrency } from '../../../utils/helper';
+import { formatDate } from '../../../utils/helper';
 import { useGetOrders } from '../../../hooks/useOrder';
 
 export default function Orders(){
 
   const [orders] = useGetOrders()
- 
+
   const navigate = useNavigate();
 
   const handleOrderClick = (orderId) => {
@@ -73,7 +70,7 @@ export default function Orders(){
                   {order.products.reduce((sum, item) => sum + item.quantity, 0)} items
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {formatCurrency(order.totalSum)}
+                  {order.totalSum.toFixed(2)} lv.
                 </td>
               </tr>
             ))}

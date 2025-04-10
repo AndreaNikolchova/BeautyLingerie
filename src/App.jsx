@@ -19,6 +19,7 @@ import EditReview from './componets/review/edit/EditReview.jsx';
 import YourReviews from './componets/review/your-reviews/YourReviews.jsx';
 import AboutPage from './componets/about/About.jsx';
 import MyOrder from './componets/orders/my-order/MyOrders.jsx';
+import OrderById from './componets/orders/order-by-id/OrderById.jsx';
 
 function App() {
   const savedAuthState = JSON.parse(sessionStorage.getItem('authState')) || {};
@@ -61,6 +62,7 @@ function App() {
           <>
             <Route path='/reviews' element={<YourReviews />} />
             <Route path='/orders' element={<MyOrder />} />
+            <Route path='/orders/:orderId' element={<OrderById />} />
             <Route path='/reviews/edit/:reviewId' element={<EditReview />} />
             <Route path='/logout' element={<LogoutItem />} />
           </>

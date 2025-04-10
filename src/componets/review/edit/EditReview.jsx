@@ -83,13 +83,7 @@ export default function EditReview() {
                 </div>
 
                 <div className="flex justify-center gap-4 pt-4">
-                    <button
-                        type="button"
-                        onClick={() => navigate(`/products/${productId}/details`)}
-                        className="rounded-md border border-gray-300 bg-white px-6 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
-                    >
-                        Cancel
-                    </button>
+                  
                     <button
                         type="submit"
                         disabled={rating === 0 || isSubmitting}

@@ -10,6 +10,8 @@ const LogoutItem = () => {
     
     changeAuthState({});
     sessionStorage.removeItem("authState");  
+    sessionStorage.removeItem("cart");
+    sessionStorage.removeItem("pendingOrder");
 
    
     navigate("/");

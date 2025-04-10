@@ -35,7 +35,7 @@ export default function Checkout() {
             <div className="flow-root">
               <ul className="-my-4 divide-y divide-gray-200">
                 {order.products.map((item) => (
-                  <li className="py-4 flex">
+                  <li className="py-4 flex" key={item.productId+item.selectedSize}>
                     <div className="flex-shrink-0">
                       <img
                         className="h-16 w-16 rounded-md object-cover"
@@ -53,9 +53,9 @@ export default function Checkout() {
                               <p className="text-sm text-gray-500">Size: {item.selectedSize}</p>
                             )}
                           </div>
-                          <p className="ml-4">${(item.price * item.quantity).toFixed(2)}</p>
+                          <p className="ml-4">{(item.price * item.quantity).toFixed(2)} lv.</p>
                         </div>
-                        <p className="mt-1 text-sm text-gray-500">${item.price.toFixed(2)} × {item.quantity}</p>
+                        <p className="mt-1 text-sm text-gray-500">{item.price.toFixed(2)} lv. × {item.quantity}</p>
                       </div>
                     </div>
                   </li>
@@ -65,15 +65,15 @@ export default function Checkout() {
             <div className="border-t border-gray-200 mt-6 pt-6">
               <div className="flex justify-between text-base font-medium text-gray-900">
                 <p>Subtotal</p>
-                <p>${order.subtotal.toFixed(2)}</p>
+                <p>{order.subtotal.toFixed(2)}lv</p>
               </div>
               <div className="flex justify-between text-base font-medium text-gray-900 mt-2">
                 <p>Shipping</p>
-                <p>{order.shipping === 0 ? 'Free' : `$${order.shipping.toFixed(2)}`}</p>
+                <p>{order.shipping === 0 ? 'Free' : `${order.shipping.toFixed(2)}lv`}</p>
               </div>
               <div className="flex justify-between text-xl font-bold text-gray-900 mt-4 pt-4 border-t border-gray-200">
                 <p>Total</p>
-                <p>${order.total.toFixed(2)}</p>
+                <p>{order.total.toFixed(2)}lv</p>
               </div>
             </div>
           </div>

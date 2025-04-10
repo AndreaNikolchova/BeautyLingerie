@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 const initialValues = { email: '', password: '' }
 export default function Login() {
+    sessionStorage.removeItem("cart");
+    sessionStorage.removeItem("pendingOrder");
     const [error, setError] = useState();
     const navigate = useNavigate();
     const login = useLogin();
