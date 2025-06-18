@@ -1,20 +1,22 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useLogin } from "../../hooks/useAuth"
 import { useForm } from "../../hooks/useForm"
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+
 
 const initialValues = { email: '', password: '' }
 export default function Login() {
-    sessionStorage.removeItem("cart");
-    sessionStorage.removeItem("pendingOrder");
     const [error, setError] = useState();
+    const { changeAuthState, fetchUser } = useContext(AuthContext);
     const navigate = useNavigate();
     const login = useLogin();
     const loginHandler = async ({ email, password }) => {
-    
+
         try{
             await login(email, password);
+            await fetchUser(changeAuthState);
             navigate("/")
         }
         catch(error)

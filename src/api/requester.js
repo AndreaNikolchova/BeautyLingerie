@@ -1,5 +1,5 @@
 export default async function requester(method, url, data) {
-    const options = {};
+    const options = {  credentials: 'include' };
     if (method !== 'GET') {
         options.method = method;
     }

@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { fetchUser } from './api/auth-api.js';
 
 import { AuthContext } from '../src/context/AuthContext.js';
 import Header from './componets/header/Header';
@@ -22,22 +23,28 @@ import MyOrder from './componets/orders/my-order/MyOrders.jsx';
 import OrderById from './componets/orders/order-by-id/OrderById.jsx';
 
 function App() {
-  const savedAuthState = JSON.parse(sessionStorage.getItem('authState')) || {};
-  const [authState, setAuthState] = useState(savedAuthState);
+  const [authState, setAuthState] = useState({
+    email: '',
+    isAuthenticated: false,
+    isAdmin: false,
+  });
 
   const changeAuthState = (state) => {
     setAuthState(state);
-    sessionStorage.setItem('authState', JSON.stringify(state));
   };
+
+  useEffect(() => {
+    fetchUser(changeAuthState);
+  }, []);
 
   const contextData = {
     email: authState.email,
-    accessToken: authState.accessToken,
-    isAuthenticated: !!authState.email,
+    isAuthenticated: authState.isAuthenticated,
     isAdmin: authState.isAdmin,
     changeAuthState,
+    fetchUser
   };
-  return (
+    return (
     <AuthContext.Provider value={contextData}>
       <Header />
       <Routes>
@@ -53,6 +60,7 @@ function App() {
         <Route path='/checkout' element={<Checkout />} />
         <Route path='/products/:productId/review' element={<AddReview />} />
         <Route path='/reviews/:productId' element={<ProductReviewsPage />} />
+
         {!contextData.isAuthenticated ? (
           <>
             <Route path='/login' element={<Login />} />
@@ -67,9 +75,6 @@ function App() {
             <Route path='/logout' element={<LogoutItem />} />
           </>
         )}
-
-
-
       </Routes>
     </AuthContext.Provider>
   );

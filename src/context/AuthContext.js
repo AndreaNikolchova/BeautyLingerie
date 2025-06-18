@@ -1,9 +1,10 @@
-import {createContext} from "react"
+import { createContext } from "react";
+
 
 export const AuthContext = createContext({
-    email: '',
-    accessToken: '',
-    isAuthenticated: false,
-    isAdmin:false,
-    changeAuthState:(authState = {}) => null,
-  });
+  email: '',
+  isAuthenticated: false,
+  isAdmin: false,
+  changeAuthState: () => null,
+  fetchUser:()=>null
+});
