@@ -21,6 +21,8 @@ import YourReviews from './componets/review/your-reviews/YourReviews.jsx';
 import AboutPage from './componets/about/About.jsx';
 import MyOrder from './componets/orders/my-order/MyOrders.jsx';
 import OrderById from './componets/orders/order-by-id/OrderById.jsx';
+import Add from './componets/add/Add.jsx';
+import Edit from './componets/edit/Edit.jsx';
 
 function App() {
   const [authState, setAuthState] = useState({
@@ -68,13 +70,26 @@ function App() {
           </>
         ) : (
           <>
+          {contextData.isAdmin ? (
+          <>
+            <Route path='/add' element={<Add />} />
+            <Route path='/edit' element={<Edit />} />
+            <Route path='/logout' element={<LogoutItem />} />
+          </>
+        ): 
+        (<>
+
             <Route path='/reviews' element={<YourReviews />} />
             <Route path='/orders' element={<MyOrder />} />
             <Route path='/orders/:orderId' element={<OrderById />} />
             <Route path='/reviews/edit/:reviewId' element={<EditReview />} />
             <Route path='/logout' element={<LogoutItem />} />
+
+        </>)}
+
           </>
         )}
+        
       </Routes>
     </AuthContext.Provider>
   );
