@@ -19,7 +19,8 @@ export default function ProductDetails() {
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, isAdmin } = useContext(AuthContext);
+  
   useEffect(() => {
     if (product?.sizes?.length > 0) {
       setSelectedSize(product.sizes[0].sizeName);
@@ -32,7 +33,6 @@ export default function ProductDetails() {
   };
 
   const handleAddToCart = () => {
-
     const sizeInfo = product.sizes.find(s => s.sizeName === selectedSize);
 
     addToCart({
@@ -49,6 +49,23 @@ export default function ProductDetails() {
   const handleSizeChange = (size) => {
     setSelectedSize(size);
     setQuantity(1);
+  };
+
+  const handleEditProduct = () => {
+    navigate(`/admin/products/edit/${productId}`);
+  };
+
+  const handleDeleteProduct = async () => {
+    if (window.confirm('Are you sure you want to delete this product?')) {
+      try {
+        // You would need to implement your delete product API call here
+        // await deleteProduct(productId);
+        toast.success('Product deleted successfully');
+        navigate('/products');
+      } catch (error) {
+        toast.error('Failed to delete product');
+      }
+    }
   };
 
   if (!product || Object.keys(product).length === 0) {
@@ -94,9 +111,7 @@ export default function ProductDetails() {
                       <p className="mt-2 text-sm text-gray-700">
                         {product.description}
                       </p>
-                      <div className="mt-4">
-
-                      </div>
+                      <div className="mt-4"></div>
                       <p className="mt-2 text-sm text-gray-700">
                         Color: {product.colorName}
                       </p>
@@ -161,7 +176,6 @@ export default function ProductDetails() {
                       )}
                       <button
                         onClick={() => {
-
                           if (isAuthenticated) {
                             navigate(`/products/${productId}/review`);
                           } else {
@@ -186,6 +200,24 @@ export default function ProductDetails() {
                           Add to cart
                         </button>
                       </div>
+
+                      {/* Admin buttons */}
+                      {isAdmin && (
+                        <div className="mt-4 flex gap-2">
+                          <button
+                            onClick={handleEditProduct}
+                            className="flex-1 rounded-md bg-yellow-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-yellow-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
+                          >
+                            Edit Product
+                          </button>
+                          <button
+                            onClick={handleDeleteProduct}
+                            className="flex-1 rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+                          >
+                            Delete Product
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -198,4 +230,3 @@ export default function ProductDetails() {
     </Dialog>
   );
 }
-
