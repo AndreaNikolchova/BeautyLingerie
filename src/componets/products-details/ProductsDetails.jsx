@@ -10,6 +10,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from '../loading/Loading';
 import { AuthContext } from '../../context/AuthContext';
+import DeleteConfirmationModal from '../delete/Delete.jsx';
 
 export default function ProductDetails() {
   const { productId } = useParams();
@@ -18,6 +19,7 @@ export default function ProductDetails() {
   const [open, setOpen] = useState(true);
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const navigate = useNavigate();
   const { isAuthenticated, isAdmin } = useContext(AuthContext);
   
@@ -52,19 +54,23 @@ export default function ProductDetails() {
   };
 
   const handleEditProduct = () => {
-    navigate(`/admin/products/edit/${productId}`);
+    navigate(`/products/edit/${productId}`);
+  };
+ 
+
+  const handleDeleteClick = () => {
+    setShowDeleteConfirm(true);
   };
 
-  const handleDeleteProduct = async () => {
-    if (window.confirm('Are you sure you want to delete this product?')) {
-      try {
-        // You would need to implement your delete product API call here
-        // await deleteProduct(productId);
-        toast.success('Product deleted successfully');
-        navigate('/products');
-      } catch (error) {
-        toast.error('Failed to delete product');
-      }
+  const confirmDelete = async () => {
+    try {
+      // await deleteProduct(productId);
+      toast.success('Product deleted successfully');
+      navigate(`/products/${productId}/details`);
+    } catch (error) {
+      toast.error('Failed to delete product');
+    } finally {
+      setShowDeleteConfirm(false);
     }
   };
 
@@ -200,8 +206,7 @@ export default function ProductDetails() {
                           Add to cart
                         </button>
                       </div>
-
-                      {/* Admin buttons */}
+                
                       {isAdmin && (
                         <div className="mt-4 flex gap-2">
                           <button
@@ -211,7 +216,7 @@ export default function ProductDetails() {
                             Edit Product
                           </button>
                           <button
-                            onClick={handleDeleteProduct}
+                            onClick={handleDeleteClick}
                             className="flex-1 rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
                           >
                             Delete Product
@@ -226,6 +231,13 @@ export default function ProductDetails() {
           </DialogPanel>
         </div>
       </div>
+            {/* Delete Confirmation Modal */}
+      {showDeleteConfirm &&   (<DeleteConfirmationModal
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={confirmDelete}
+        itemName={product?.name || 'this item'}
+      />)}
       <ToastContainer position="top-right" autoClose={2000} />
     </Dialog>
   );
