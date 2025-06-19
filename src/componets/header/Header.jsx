@@ -28,7 +28,7 @@ const productCategories = [
 
 export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const { isAuthenticated } = useContext(AuthContext);
+    const { isAuthenticated, isAdmin } = useContext(AuthContext);
     return (
         <header className="bg-beige">
             <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
@@ -83,7 +83,7 @@ export default function Header() {
                     <Link to={'/about'} className="text-sm font-semibold leading-6 text-gray-900">
                         About
                     </Link>
-                    {isAuthenticated && (
+                    {isAuthenticated && !isAdmin&&(
                         <>
                             <Link
                                 to="/reviews"
@@ -96,6 +96,23 @@ export default function Header() {
                                 className="text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-500 transition-colors"
                             >
                                 My Orders
+                            </Link>
+                        </>
+
+                    )}
+                    {isAdmin && isAuthenticated && (
+                        <>
+                            <Link
+                                to="/add"
+                                className="text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-500 transition-colors"
+                            >
+                               Add
+                            </Link>
+                            <Link
+                                to="/all/orders"
+                                className="text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-500 transition-colors"
+                            >
+                                Orders
                             </Link>
                         </>
 
@@ -175,7 +192,7 @@ export default function Header() {
                                 >
                                     About
                                 </Link>
-                                {isAuthenticated && (
+                                {isAuthenticated && !isAdmin&& (
                                     <>
                                         <Link
                                             to="/reviews"
@@ -194,6 +211,23 @@ export default function Header() {
                                     </>
 
                                 )}
+                                  {isAdmin && isAuthenticated && (
+                        <>
+                            <Link
+                                to="/add"
+                                className="text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-500 transition-colors"
+                            >
+                               Add
+                            </Link>
+                            <Link
+                                to="/all/orders"
+                                className="text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-500 transition-colors"
+                            >
+                                Orders
+                            </Link>
+                        </>
+
+                    )}
                             </div>
                             <div className="py-6">
 
