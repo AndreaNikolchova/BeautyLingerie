@@ -13,12 +13,12 @@ export const postOrder = async(orderObj) => {
     phoneNumber: orderObj.phoneNumber, 
     shippingAddress: orderObj.shippingAddress
 };
- await request.post(`${BASE_URL}/Order/Add-guest`,formattedData);
+ await request.post(`${BASE_URL}/order/add-guest`,formattedData);
 
 }
 export const getOrders = async(email) =>{
-   return await request.get(`${BASE_URL}/Orders/${email}`);
+   return await request.get(`${BASE_URL}/orders/${email}`);
 }
 export const getOrderById = async(orderId) =>{
-  return await request.get(`${BASE_URL}/Order/${orderId}`);
+  return await request.get(`${BASE_URL}/order/${orderId}`);
 }
